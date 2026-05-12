@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUT Financial Hub — ID Upload</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f0faf5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 24px 48px rgba(0,0,0,0.06);
+    }
+
+    .progress-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 32px;
+    }
+
+    .progress-step {
+      height: 4px;
+      flex: 1;
+      border-radius: 999px;
+      background: #d4e8dc;
+    }
+
+    .progress-step.done { background: #1a7a4a; }
+    .progress-step.active { background: #1a7a4a; }
+
+    .step-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #4a7a5a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f2419;
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b8a75;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #4a7a5a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .id-type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .id-type-btn {
+      padding: 14px 10px;
+      border: 1.5px solid #d4e8dc;
+      border-radius: 12px;
+      background: #ffffff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #4a7a5a;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .id-type-btn:hover {
+      border-color: #1a7a4a;
+      background: #f0faf5;
+    }
+
+    .id-type-btn.selected {
+      border-color: #1a7a4a;
+      background: #f0faf5;
+      color: #0f2419;
+    }
+
+    .id-type-btn .icon { font-size: 20px; display: block; margin-bottom: 6px; }
+
+    .upload-area {
+      border: 2px dashed #c8e6d4;
+      border-radius: 16px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-bottom: 8px;
+      background: #f7fdf9;
+      position: relative;
+    }
+
+    .upload-area:hover {
+      border-color: #1a7a4a;
+      background: #f0faf5;
+    }
+
+    .upload-area.has-file {
+      border-color: #1a7a4a;
+      background: #f0faf5;
+    }
+
+    .upload-icon { font-size: 36px; margin-bottom: 12px; }
+
+    .upload-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f2419;
+      margin-bottom: 6px;
+    }
+
+    .upload-sub {
+      font-size: 13px;
+      color: #9ab8a4;
+    }
+
+    .upload-input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .file-name {
+      font-size: 12px;
+      color: #1a7a4a;
+      font-weight: 600;
+      margin-bottom: 20px;
+      min-height: 18px;
+      text-align: center;
+    }
+
+    .preview-img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .tips {
+      background: #f7fdf9;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 24px;
+    }
+
+    .tips-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1a7a4a;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .tip-item {
+      font-size: 12px;
+      color: #5a8a6a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .error {
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      color: #cc0000;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: #1a7a4a;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover { background: #155f3a; }
+    .btn:disabled { background: #a0c4b0; cursor: not-allowed; }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <div class="progress-bar">
+      <div class="progress-step done"></div>
+      <div class="progress-step done"></div>
+      <div class="progress-step active"></div>
+    </div>
+
+    <div class="step-label">Step 2 of 2 — Government ID</div>
+
+    <h1>Upload your ID</h1>
+    <p class="subtitle">We need a clear photo of a valid government-issued ID to complete your verification.</p>
+
+    <label class="label">Select ID type</label>
+    <div class="id-type-grid">
+      <button class="id-type-btn selected" onclick="selectID(this, 'NIN Slip')">
+        <span class="icon">🪪</span>NIN Slip
+      </button>
+      <button class="id-type-btn" onclick="selectID(this, 'Voters Card')">
+        <span class="icon">🗳️</span>Voter's Card
+      </button>
+      <button class="id-type-btn" onclick="selectID(this, 'International Passport')">
+        <span class="icon">📘</span>Int'l Passport
+      </button>
+      <button class="id-type-btn" onclick="selectID(this, "Driver's Licence")">
+        <span class="icon">🚗</span>Driver's Licence
+      </button>
+    </div>
+
+    <label class="label">Upload ID photo</label>
+    <div class="upload-area" id="uploadArea">
+      <input
+        type="file"
+        class="upload-input"
+        id="fileInput"
+        accept="image/*"
+        onchange="handleFile(this)"
+      />
+      <div class="upload-icon">📄</div>
+      <div class="upload-title">Tap to upload or take photo</div>
+      <div class="upload-sub">JPG, PNG or PDF · Max 5MB</div>
+      <img class="preview-img" id="previewImg" />
+    </div>
+    <div class="file-name" id="fileName"></div>
+
+    <div class="tips">
+      <div class="tips-title">📸 Photo tips</div>
+      <div class="tip-item">✅ All four corners of the ID must be visible</div>
+      <div class="tip-item">✅ Text must be clear and readable</div>
+      <div class="tip-item">✅ No glare or shadows on the ID</div>
+      <div class="tip-item">❌ Do not upload a photocopy</div>
+    </div>
+
+    <div class="error" id="errorBox"></div>
+
+    <button class="btn" id="submitBtn" onclick="submitID()">
+      <span id="btnText">Submit & continue</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+
+  </div>
+
+  <script type="module">
+    import { db, storage } from './js/firebase.js';
+    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    let selectedIDType = 'NIN Slip';
+    let selectedFile = null;
+
+    window.selectID = function (btn, type) {
+      document.querySelectorAll('.id-type-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedIDType = type;
+    };
+
+    window.handleFile = function (input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      if (file.size > 5 * 1024 * 1024) {
+        document.getElementById('errorBox').textContent = 'File is too large. Maximum size is 5MB.';
+        document.getElementById('errorBox').style.display = 'block';
+        return;
+      }
+
+      selectedFile = file;
+      document.getElementById('fileName').textContent = '✅ ' + file.name;
+      document.getElementById('uploadArea').classList.add('has-file');
+
+      // Show image preview
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = document.getElementById('previewImg');
+          img.src = e.target.result;
+          img.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    window.submitID = async function () {
+      const errorBox = document.getElementById('errorBox');
+      const btn = document.getElementById('submitBtn');
+      const spinner = document.getElementById('spinner');
+      const btnText = document.getElementById('btnText');
+
+      errorBox.style.display = 'none';
+
+      if (!selectedFile) {
+        errorBox.textContent = 'Please upload a photo of your ID before continuing.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      spinner.style.display = 'block';
+      btnText.textContent = 'Uploading...';
+
+      try {
+        const uid = sessionStorage.getItem('nut_uid');
+
+        // Upload to Firebase Storage
+        const storageRef = ref(storage, `kyc/${uid}/government-id`);
+        await uploadBytes(storageRef, selectedFile);
+        const downloadURL = await getDownloadURL(storageRef);
+
+        // Save to Firestore
+        await setDoc(doc(db, 'members', uid), {
+          idType: selectedIDType,
+          idDocumentURL: downloadURL,
+          kycStep: 'id_submitted',
+          kycStatus: 'pending_review',
+          submittedAt: new Date().toISOString(),
+        }, { merge: true });
+
+        // Go to dashboard
+        window.location.href = 'dashboard.html';
+
+      } catch (err) {
+        console.error(err);
+        errorBox.textContent = 'Upload failed. Please check your connection and try again.';
+        errorBox.style.display = 'block';
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.textContent = 'Submit & continue';
+      }
+    };
+  </script>
+
+</body>
+</html>
