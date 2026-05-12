@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NUT Financial Hub — Design</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="tokens.js"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="android-frame.jsx"></script>
+  <script type="text/babel" src="browser-window.jsx"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="screens-onboarding.jsx"></script>
+  <script type="text/babel" src="screens-features.jsx"></script>
+  <script type="text/babel" src="screens-web.jsx"></script>
+  <script type="text/babel" src="screens-admin.jsx"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="env,react">
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "palette": "forest",
+      "font": "jakarta",
+      "userState": "approved"
+    }/*EDITMODE-END*/;
+
+    function App() {
+      const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+      // palette swatches → key lookup
+      const PALETTE_SWATCHES = {
+        forest: ['oklch(0.40 0.10 155)', 'oklch(0.78 0.13 85)', 'oklch(0.94 0.045 155)'],
+        navy:   ['oklch(0.32 0.09 255)', 'oklch(0.74 0.14 80)', 'oklch(0.94 0.03 255)'],
+        sage:   ['oklch(0.52 0.07 165)', 'oklch(0.66 0.13 35)', 'oklch(0.95 0.025 165)'],
+      };
+      const currentSwatches = PALETTE_SWATCHES[tweaks.palette] || PALETTE_SWATCHES.forest;
+      const setPaletteFromSwatches = (arr) => {
+        const key = Object.keys(PALETTE_SWATCHES).find(
+          (k) => PALETTE_SWATCHES[k][0] === arr[0]
+        ) || 'forest';
+        setTweak('palette', key);
+      };
+
+      React.useEffect(() => {
+        window.applyNutTokens(tweaks.palette, tweaks.font);
+      }, [tweaks.palette, tweaks.font]);
+
+      const userState = tweaks.userState;
+
+      return (
+        <React.Fragment>
+          <DesignCanvas>
+
+            {/* ═══════════════ MOBILE ═══════════════ */}
+            <DCSection id="onboarding" title="Mobile · Onboarding & KYC" subtitle="From welcome screen to verified member — 7 screens">
+              <DCArtboard id="welcome" label="01 · Welcome" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenWelcome /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="phone" label="02 · Phone number" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenPhone /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="otp" label="03 · OTP" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenOtp /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="kyc-intro" label="04 · KYC checklist" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenKycIntro /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="kyc-bvn" label="05 · BVN entry" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenKycBvn /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="kyc-id" label="06 · ID capture" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenKycId /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="kyc-selfie" label="07 · Selfie liveness" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenKycSelfie /></AndroidDevice>
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="dashboard" title="Mobile · Dashboard" subtitle={`Logged-in user state: ${userState.replace('_',' ')} — toggle in Tweaks`}>
+              <DCArtboard id="dash-current" label={`01 · ${userState === 'pending' ? 'Pending KYC' : userState === 'with_loan' ? 'With active loan' : 'Approved member'}`} width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenDashboard state={userState} /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="dash-approved" label="02 · Approved (default)" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenDashboard state="approved" /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="dash-pending" label="03 · Pending KYC" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenDashboard state="pending" /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="dash-loan" label="04 · With active loan" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenDashboard state="with_loan" /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="txn-history" label="05 · Transaction history" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenTxnHistory /></AndroidDevice>
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="loans" title="Mobile · Loan application" subtitle="Education, salary advance, asset finance · end-to-end">
+              <DCArtboard id="loan-list" label="01 · Loan products" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenLoans state={userState} /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="loan-calc" label="02 · Calculator + apply" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenLoanCalc /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="loan-approved" label="03 · Approval status" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenLoanApproved /></AndroidDevice>
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="savings" title="Mobile · Savings" subtitle="Wallet + goal-based savings with auto-debit">
+              <DCArtboard id="savings-overview" label="01 · Wallet & goals" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenSavings /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="savings-new" label="02 · New goal setup" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenSavingsNew /></AndroidDevice>
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="insurance" title="Mobile · Insurance" subtitle="Catalogue → quote → purchase → policy certificate">
+              <DCArtboard id="ins-catalogue" label="01 · Product catalogue" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenInsurance /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="ins-quote" label="02 · Motor quote builder" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenInsuranceQuote /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="ins-cert" label="03 · Policy certificate" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenInsuranceCert /></AndroidDevice>
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="profile-support" title="Mobile · Profile & Support" subtitle="Settings, in-app tickets">
+              <DCArtboard id="profile" label="01 · Profile" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenProfile /></AndroidDevice>
+              </DCArtboard>
+              <DCArtboard id="support" label="02 · Support tickets" width={400} height={820}>
+                <AndroidDevice width={400} height={820}><ScreenSupport /></AndroidDevice>
+              </DCArtboard>
+            </DCSection>
+
+            {/* ═══════════════ WEB ═══════════════ */}
+            <DCSection id="web" title="Responsive web · Member portal" subtitle="Desktop view of the same data — for office computers and feature phones over web">
+              <DCArtboard id="web-dash" label="01 · Web dashboard" width={1280} height={820}>
+                <ChromeWindow url="hub.nut.org.ng/dashboard" width={1280} height={820}><WebMemberPortal /></ChromeWindow>
+              </DCArtboard>
+            </DCSection>
+
+            {/* ═══════════════ ADMIN ═══════════════ */}
+            <DCSection id="admin" title="Admin portal · Operations" subtitle="KPIs, approval queues, audit logs — for branch officers">
+              <DCArtboard id="admin-dash" label="01 · Operations dashboard" width={1280} height={820}>
+                <ChromeWindow url="ops.nut.org.ng/dashboard" width={1280} height={820}><AdminPortal /></ChromeWindow>
+              </DCArtboard>
+              <DCArtboard id="admin-kyc" label="02 · KYC review detail" width={1280} height={820}>
+                <ChromeWindow url="ops.nut.org.ng/queues/kyc/22841" width={1280} height={820}><AdminKycReview /></ChromeWindow>
+              </DCArtboard>
+            </DCSection>
+          </DesignCanvas>
+
+          <TweaksPanel title="Tweaks" defaultOpen={false}>
+            <TweakSection label="Brand palette">
+              <TweakColor
+                label="Theme"
+                value={currentSwatches}
+                onChange={setPaletteFromSwatches}
+                options={Object.values(PALETTE_SWATCHES)}
+              />
+            </TweakSection>
+
+            <TweakSection label="Typography">
+              <TweakSelect
+                label="Font pairing"
+                value={tweaks.font}
+                onChange={(v) => setTweak('font', v)}
+                options={[
+                  { value: 'jakarta', label: 'Plus Jakarta + DM Sans' },
+                  { value: 'manrope', label: 'Manrope + Inter' },
+                  { value: 'geist', label: 'Geist' },
+                ]}
+              />
+            </TweakSection>
+
+            <TweakSection label="User state">
+              <TweakRadio
+                label="Logged-in as"
+                value={tweaks.userState}
+                onChange={(v) => setTweak('userState', v)}
+                options={[
+                  { value: 'pending', label: 'Pending' },
+                  { value: 'approved', label: 'Approved' },
+                  { value: 'with_loan', label: 'Has loan' },
+                ]}
+              />
+            </TweakSection>
+          </TweaksPanel>
+        </React.Fragment>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
