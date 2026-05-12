@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUT Financial Hub — Verify OTP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f0faf5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 24px 48px rgba(0,0,0,0.06);
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #4a7a5a;
+      cursor: pointer;
+      margin-bottom: 28px;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 0;
+    }
+
+    .back-btn:hover { color: #1a7a4a; }
+
+    .logo-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #1a7a4a, #0f5233);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 22px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f2419;
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b8a75;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .phone-display {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a7a4a;
+      margin-bottom: 32px;
+    }
+
+    .otp-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      justify-content: center;
+    }
+
+    .otp-input {
+      width: 52px;
+      height: 58px;
+      border: 2px solid #d4e8dc;
+      border-radius: 14px;
+      text-align: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f2419;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      background: #f7fdf9;
+    }
+
+    .otp-input:focus {
+      border-color: #1a7a4a;
+      box-shadow: 0 0 0 3px rgba(26,122,74,0.12);
+      background: #ffffff;
+    }
+
+    .otp-input.filled {
+      border-color: #1a7a4a;
+      background: #f0faf5;
+    }
+
+    .error {
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      color: #cc0000;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: #1a7a4a;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover { background: #155f3a; }
+    .btn:disabled { background: #a0c4b0; cursor: not-allowed; }
+
+    .resend-row {
+      text-align: center;
+      font-size: 13px;
+      color: #6b8a75;
+    }
+
+    .resend-btn {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a7a4a;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .resend-btn:disabled { color: #a0c4b0; cursor: not-allowed; }
+
+    .countdown {
+      font-weight: 700;
+      color: #1a7a4a;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <button class="back-btn" onclick="window.location.href='index.html'">
+      ← Back
+    </button>
+
+    <div class="logo-icon">N·</div>
+
+    <h1>Enter the code</h1>
+    <p class="subtitle">We sent a 6-digit code to</p>
+    <p class="phone-display" id="phoneDisplay">+234 000 000 0000</p>
+
+    <div class="otp-row">
+      <input class="otp-input" type="tel" maxlength="1" id="d1" />
+      <input class="otp-input" type="tel" maxlength="1" id="d2" />
+      <input class="otp-input" type="tel" maxlength="1" id="d3" />
+      <input class="otp-input" type="tel" maxlength="1" id="d4" />
+      <input class="otp-input" type="tel" maxlength="1" id="d5" />
+      <input class="otp-input" type="tel" maxlength="1" id="d6" />
+    </div>
+
+    <div class="error" id="errorBox"></div>
+
+    <button class="btn" id="verifyBtn" onclick="verifyOTP()">
+      <span id="btnText">Verify & continue</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+
+    <div class="resend-row">
+      Didn't get the code?
+      <button class="resend-btn" id="resendBtn" onclick="resendCode()" disabled>
+        Resend in <span class="countdown" id="countdown">30</span>s
+      </button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth } from './js/firebase.js';
+    import { RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    // Show phone number
+    const phone = sessionStorage.getItem('nut_phone') || '';
+    document.getElementById('phoneDisplay').textContent = phone;
+
+    // OTP input auto-advance
+    const inputs = document.querySelectorAll('.otp-input');
+    inputs.forEach((input, i) => {
+      input.addEventListener('input', () => {
+        input.value = input.value.replace(/[^0-9]/g, '');
+        if (input.value && i < inputs.length - 1) {
+          inputs[i + 1].focus();
+        }
+        input.classList.toggle('filled', !!input.value);
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && i > 0) {
+          inputs[i - 1].focus();
+        }
+      });
+    });
+
+    // Focus first input
+    inputs[0].focus();
+
+    // Countdown timer
+    let seconds = 30;
+    const countdownEl = document.getElementById('countdown');
+    const resendBtn = document.getElementById('resendBtn');
+
+    const timer = setInterval(() => {
+      seconds--;
+      countdownEl.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(timer);
+        resendBtn.innerHTML = 'Resend code';
+        resendBtn.disabled = false;
+      }
+    }, 1000);
+
+    // Verify OTP
+    window.verifyOTP = async function () {
+      const code = Array.from(inputs).map(i => i.value).join('');
+      const errorBox = document.getElementById('errorBox');
+      const btn = document.getElementById('verifyBtn');
+      const spinner = document.getElementById('spinner');
+      const btnText = document.getElementById('btnText');
+
+      errorBox.style.display = 'none';
+
+      if (code.length < 6) {
+        errorBox.textContent = 'Please enter all 6 digits of your code.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      spinner.style.display = 'block';
+      btnText.textContent = 'Verifying...';
+
+      try {
+        const result = await window.confirmationResult.confirm(code);
+        const user = result.user;
+        sessionStorage.setItem('nut_uid', user.uid);
+        window.location.href = 'kyc-bvn.html';
+      } catch (err) {
+        console.error(err);
+        errorBox.textContent = 'Incorrect code. Please check and try again.';
+        errorBox.style.display = 'block';
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.textContent = 'Verify & continue';
+      }
+    };
+
+    // Resend code
+    window.resendCode = async function () {
+      const phone = sessionStorage.getItem('nut_phone');
+      try {
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+          size: 'invisible', callback: () => {}
+        });
+        const result = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+        window.confirmationResult = result;
+        resendBtn.innerHTML = 'Code resent!';
+        resendBtn.disabled = true;
+      } catch (err) {
+        console.error(err);
+      }
+    };
+  </script>
+
+  <div id="recaptcha-container"></div>
+
+</body>
+</html>
