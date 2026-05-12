@@ -15,7 +15,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── NAV ── */
     nav {
       display: flex;
       align-items: center;
@@ -29,44 +28,13 @@
       z-index: 100;
     }
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo img { width: 44px; height: 44px; object-fit: contain; }
+    .nav-logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .nav-logo-name { font-size: 15px; font-weight: 800; color: #0f2419; letter-spacing: -0.02em; }
+    .nav-logo-sub { font-size: 10px; font-weight: 700; color: #1a7a4a; text-transform: uppercase; letter-spacing: 0.08em; }
 
-    .nav-logo img {
-      width: 44px;
-      height: 44px;
-      object-fit: contain;
-    }
-
-    .nav-logo-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-    }
-
-    .nav-logo-name {
-      font-size: 15px;
-      font-weight: 800;
-      color: #0f2419;
-      letter-spacing: -0.02em;
-    }
-
-    .nav-logo-sub {
-      font-size: 10px;
-      font-weight: 700;
-      color: #1a7a4a;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
 
     .nav-link {
       padding: 10px 18px;
@@ -94,13 +62,12 @@
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.15s;
       text-decoration: none;
+      transition: background 0.15s;
     }
 
     .nav-cta:hover { background: #155f3a; }
 
-    /* ── CHAPTER BAR ── */
     .chapter-bar {
       background: #0f5233;
       padding: 10px 40px;
@@ -108,6 +75,7 @@
       align-items: center;
       justify-content: center;
       gap: 16px;
+      flex-wrap: wrap;
     }
 
     .chapter-bar img {
@@ -131,89 +99,101 @@
       background: rgba(255,255,255,0.2);
     }
 
-    /* ── HERO ── */
     .hero {
-      background: linear-gradient(160deg, #0f5233 0%, #1a7a4a 55%, #2a9a5a 100%);
-      padding: 60px 40px 0;
+      background: linear-gradient(160deg, #f0faf5 0%, #e4f5ec 100%);
+      padding: 64px 40px 72px;
+      text-align: center;
+      position: relative;
       overflow: hidden;
     }
 
-    .hero-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: flex-end;
+    .hero::before {
+      content: '';
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      border: 52px solid rgba(26,122,74,0.06);
     }
 
-    .hero-left { padding-bottom: 60px; }
+    .hero::after {
+      content: '';
+      position: absolute;
+      left: -60px;
+      bottom: -60px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      border: 40px solid rgba(26,122,74,0.05);
+    }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 7px 14px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.22);
+      padding: 7px 16px;
+      background: white;
+      border: 1px solid #c8e6d4;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 700;
-      color: rgba(255,255,255,0.9);
+      color: #1a7a4a;
       margin-bottom: 22px;
+      position: relative;
     }
 
     .hero-badge-dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #f5d98a;
+      background: #1a7a4a;
     }
 
-    .hero-logo-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .hero-logo-row img {
-      width: 56px;
-      height: 56px;
+    .hero-logo {
+      width: 80px;
+      height: 80px;
       object-fit: contain;
-      filter: brightness(0) invert(1);
-      opacity: 0.92;
+      margin: 0 auto 22px;
+      display: block;
+      position: relative;
     }
 
     .hero h1 {
-      font-size: clamp(32px, 4vw, 52px);
+      font-size: clamp(32px, 5vw, 54px);
       font-weight: 800;
+      color: #0f2419;
       letter-spacing: -0.03em;
       line-height: 1.1;
-      margin-bottom: 18px;
-      color: white;
+      margin-bottom: 16px;
+      position: relative;
     }
 
-    .hero h1 .highlight { color: #f5d98a; }
+    .hero h1 .highlight { color: #1a7a4a; }
 
     .hero-sub {
-      font-size: 16px;
-      color: rgba(255,255,255,0.75);
-      max-width: 460px;
-      margin-bottom: 32px;
+      font-size: 17px;
+      color: #5a8a6a;
+      max-width: 520px;
+      margin: 0 auto 32px;
       line-height: 1.65;
+      position: relative;
     }
 
-    .hero-actions {
+    .hero-btns {
       display: flex;
       gap: 12px;
+      justify-content: center;
       flex-wrap: wrap;
+      margin-bottom: 40px;
+      position: relative;
     }
 
-    .btn-gold {
-      padding: 15px 28px;
-      background: #f5d98a;
-      color: #0f2419;
+    .btn-primary {
+      padding: 15px 30px;
+      background: #1a7a4a;
+      color: white;
       border: none;
       border-radius: 13px;
       font-family: inherit;
@@ -227,13 +207,13 @@
       gap: 8px;
     }
 
-    .btn-gold:hover { background: #f0cc6a; }
+    .btn-primary:hover { background: #155f3a; transform: translateY(-1px); }
 
-    .btn-ghost-white {
-      padding: 15px 28px;
-      background: rgba(255,255,255,0.12);
-      color: white;
-      border: 1.5px solid rgba(255,255,255,0.3);
+    .btn-secondary {
+      padding: 15px 30px;
+      background: white;
+      color: #1a7a4a;
+      border: 1.5px solid #c8e6d4;
       border-radius: 13px;
       font-family: inherit;
       font-size: 15px;
@@ -246,92 +226,43 @@
       gap: 8px;
     }
 
-    .btn-ghost-white:hover { background: rgba(255,255,255,0.2); }
+    .btn-secondary:hover { background: #f0faf5; border-color: #1a7a4a; }
 
-    .hero-right {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      max-width: 760px;
+      margin: 0 auto;
       position: relative;
     }
 
-    .hero-teacher-img {
-      width: 100%;
-      max-width: 360px;
-      display: block;
-      object-fit: contain;
-      margin: 0 auto;
-    }
-
-    .hero-float-card {
-      position: absolute;
-      bottom: 32px;
-      left: -10px;
+    .metric-card {
       background: white;
-      border-radius: 14px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    }
-
-    .float-icon {
-      width: 38px;
-      height: 38px;
-      background: #f0faf5;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .float-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #0f2419;
-    }
-
-    .float-sub {
-      font-size: 11px;
-      color: #7aaa8a;
-      margin-top: 2px;
-    }
-
-    /* ── STATS ── */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      border-top: 1px solid #eaf3ec;
-      border-bottom: 1px solid #eaf3ec;
-      background: white;
-    }
-
-    .stat-item {
-      padding: 36px 20px;
+      border: 1px solid #eaf3ec;
+      border-radius: 16px;
+      padding: 18px 14px;
       text-align: center;
-      border-right: 1px solid #eaf3ec;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
-    .stat-item:last-child { border-right: none; }
-
-    .stat-number {
-      font-size: 38px;
+    .metric-num {
+      font-size: 22px;
       font-weight: 800;
       color: #1a7a4a;
-      letter-spacing: -0.03em;
-      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+      margin-bottom: 5px;
     }
 
-    .stat-label {
-      font-size: 14px;
-      color: #7aaa8a;
+    .metric-label {
+      font-size: 11px;
       font-weight: 600;
+      color: #7aaa8a;
+      line-height: 1.4;
     }
 
-    /* ── SERVICES ── */
+    .services-wrap { background: #f7fdf9; }
+
     .section {
       padding: 72px 40px;
       max-width: 1100px;
@@ -370,7 +301,7 @@
     }
 
     .service-card {
-      background: #f7fdf9;
+      background: white;
       border: 1px solid #eaf3ec;
       border-radius: 20px;
       padding: 28px;
@@ -383,26 +314,9 @@
       border-color: #c8e6d4;
     }
 
-    .service-icon {
-      font-size: 40px;
-      margin-bottom: 16px;
-      display: block;
-    }
-
-    .service-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: #0f2419;
-      margin-bottom: 10px;
-      letter-spacing: -0.02em;
-    }
-
-    .service-desc {
-      font-size: 14px;
-      color: #5a8a6a;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
+    .service-icon { font-size: 40px; margin-bottom: 16px; display: block; }
+    .service-title { font-size: 20px; font-weight: 800; color: #0f2419; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .service-desc { font-size: 14px; color: #5a8a6a; line-height: 1.6; margin-bottom: 20px; }
 
     .service-feature {
       display: flex;
@@ -422,16 +336,9 @@
       flex-shrink: 0;
     }
 
-    /* ── TESTIMONIALS ── */
-    .testi-section {
-      background: #f7fdf9;
-      padding: 72px 40px;
-    }
+    .testi-section { background: white; padding: 72px 40px; }
 
-    .testi-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+    .testi-inner { max-width: 1100px; margin: 0 auto; }
 
     .testi-grid {
       display: grid;
@@ -441,18 +348,13 @@
     }
 
     .testi-card {
-      background: white;
+      background: #f7fdf9;
       border: 1px solid #eaf3ec;
       border-radius: 20px;
       padding: 24px;
     }
 
-    .testi-top {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
+    .testi-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 
     .testi-avatar {
       width: 48px;
@@ -466,27 +368,10 @@
       font-weight: 800;
       color: #1a7a4a;
       flex-shrink: 0;
-      letter-spacing: -0.02em;
     }
 
-    .testi-name {
-      font-size: 15px;
-      font-weight: 700;
-      color: #0f2419;
-    }
-
-    .testi-role {
-      font-size: 12px;
-      color: #7aaa8a;
-      margin-top: 2px;
-    }
-
-    .testi-quote {
-      font-size: 14px;
-      color: #3a6a4a;
-      line-height: 1.65;
-      font-style: italic;
-    }
+    .testi-name { font-size: 15px; font-weight: 700; color: #0f2419; }
+    .testi-role { font-size: 12px; color: #7aaa8a; margin-top: 2px; }
 
     .testi-open {
       font-size: 32px;
@@ -494,15 +379,11 @@
       line-height: 1;
       display: block;
       margin-bottom: 8px;
-      font-style: normal;
     }
 
-    /* ── HOW IT WORKS ── */
-    .how-section {
-      padding: 72px 40px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+    .testi-quote { font-size: 14px; color: #3a6a4a; line-height: 1.65; font-style: italic; }
+
+    .how-section { padding: 72px 40px; max-width: 1100px; margin: 0 auto; }
 
     .steps-grid {
       display: grid;
@@ -511,10 +392,7 @@
       margin-top: 44px;
     }
 
-    .step-card {
-      text-align: center;
-      padding: 20px;
-    }
+    .step-card { text-align: center; padding: 20px; }
 
     .step-number {
       width: 52px;
@@ -530,20 +408,9 @@
       margin: 0 auto 16px;
     }
 
-    .step-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #0f2419;
-      margin-bottom: 8px;
-    }
+    .step-title { font-size: 16px; font-weight: 700; color: #0f2419; margin-bottom: 8px; }
+    .step-desc { font-size: 13px; color: #5a8a6a; line-height: 1.6; }
 
-    .step-desc {
-      font-size: 13px;
-      color: #5a8a6a;
-      line-height: 1.6;
-    }
-
-    /* ── CTA ── */
     .cta-section {
       background: linear-gradient(135deg, #0f5233 0%, #1a7a4a 100%);
       padding: 80px 40px;
@@ -580,24 +447,8 @@
       opacity: 0.88;
     }
 
-    .cta-logo-text {
-      text-align: left;
-    }
-
-    .cta-logo-name {
-      font-size: 18px;
-      font-weight: 800;
-      color: white;
-      letter-spacing: -0.02em;
-    }
-
-    .cta-logo-sub {
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.6);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
+    .cta-logo-name { font-size: 18px; font-weight: 800; color: white; text-align: left; letter-spacing: -0.02em; }
+    .cta-logo-sub { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.08em; }
 
     .cta-section h2 {
       font-size: clamp(26px, 3vw, 40px);
@@ -637,8 +488,8 @@
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s;
       text-decoration: none;
+      transition: all 0.15s;
     }
 
     .btn-white:hover { transform: translateY(-1px); }
@@ -653,13 +504,12 @@
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s;
       text-decoration: none;
+      transition: all 0.15s;
     }
 
     .btn-outline-white:hover { background: rgba(255,255,255,0.1); }
 
-    /* ── FOOTER ── */
     footer {
       padding: 36px 40px;
       border-top: 1px solid #eaf3ec;
@@ -671,37 +521,12 @@
       background: white;
     }
 
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .footer-logo { display: flex; align-items: center; gap: 10px; }
+    .footer-logo img { width: 36px; height: 36px; object-fit: contain; }
+    .footer-logo-name { font-size: 14px; font-weight: 800; color: #0f2419; }
+    .footer-logo-sub { font-size: 10px; font-weight: 700; color: #1a7a4a; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
 
-    .footer-logo img {
-      width: 36px;
-      height: 36px;
-      object-fit: contain;
-    }
-
-    .footer-logo-name {
-      font-size: 14px;
-      font-weight: 800;
-      color: #0f2419;
-    }
-
-    .footer-logo-sub {
-      font-size: 10px;
-      font-weight: 700;
-      color: #1a7a4a;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-top: 2px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 24px;
-    }
+    .footer-links { display: flex; gap: 24px; }
 
     .footer-link {
       font-size: 13px;
@@ -712,23 +537,13 @@
     }
 
     .footer-link:hover { color: #1a7a4a; }
+    .footer-copy { font-size: 13px; color: #9ab8a4; }
 
-    .footer-copy {
-      font-size: 13px;
-      color: #9ab8a4;
-    }
-
-    /* ── MOBILE ── */
     @media (max-width: 768px) {
       nav { padding: 14px 20px; }
-      .chapter-bar { padding: 10px 16px; flex-wrap: wrap; gap: 8px; }
-      .hero { padding: 40px 20px 0; }
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-right { display: none; }
-      .hero-left { padding-bottom: 40px; }
-      .stats { grid-template-columns: 1fr; }
-      .stat-item { border-right: none; border-bottom: 1px solid #eaf3ec; }
-      .stat-item:last-child { border-bottom: none; }
+      .chapter-bar { padding: 10px 16px; }
+      .hero { padding: 48px 20px 56px; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
       .section { padding: 48px 20px; }
       .services-grid { grid-template-columns: 1fr; }
       .testi-section { padding: 48px 20px; }
@@ -742,10 +557,9 @@
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
     <div class="nav-logo">
-      <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos Logo" />
+      <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
       <div class="nav-logo-text">
         <div class="nav-logo-name">NUT Lagos</div>
         <div class="nav-logo-sub">Financial Hub</div>
@@ -759,7 +573,6 @@
     </div>
   </nav>
 
-  <!-- CHAPTER BAR -->
   <div class="chapter-bar">
     <img src="NUT_LOGO-removebg-preview.png" alt="NUT" />
     <div class="chapter-bar-text">Nigeria Union of Teachers — Lagos Chapter</div>
@@ -767,63 +580,46 @@
     <div class="chapter-bar-text">Official member financial platform · Founded 1931</div>
   </div>
 
-  <!-- HERO -->
   <div class="hero">
-    <div class="hero-inner">
-      <div class="hero-left">
-        <div class="hero-badge">
-          <div class="hero-badge-dot"></div>
-          Lagos Chapter · Official platform
-        </div>
-        <div class="hero-logo-row">
-          <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
-        </div>
-        <h1>Financial power<br/>for <span class="highlight">Lagos teachers</span></h1>
-        <p class="hero-sub">
-          Access cooperative loans, grow your savings and protect your family —
-          built exclusively for NUT Lagos Chapter members.
-        </p>
-        <div class="hero-actions">
-          <a class="btn-gold" href="signup.html">🎓 Create your account</a>
-          <a class="btn-ghost-white" href="login.html">I already have an account</a>
-        </div>
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Lagos Chapter · Official platform
+    </div>
+    <img class="hero-logo" src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
+    <h1>Financial power for<br/><span class="highlight">Lagos teachers</span></h1>
+    <p class="hero-sub">
+      Access cooperative loans, grow your savings and protect your family —
+      built exclusively for NUT Lagos Chapter members.
+    </p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="signup.html">🎓 Create your account</a>
+      <a class="btn-secondary" href="login.html">I already have an account</a>
+    </div>
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="metric-num">45,000+</div>
+        <div class="metric-label">Lagos NUT members</div>
       </div>
-      <div class="hero-right">
-        <img
-          class="hero-teacher-img"
-          src="1778600153102_Teaching-Under-Stress-The-Experience-of-a-Nigerian-Teacher-1-removebg-preview.png"
-          alt="NUT Lagos teacher"
-        />
-        <div class="hero-float-card">
-          <div class="float-icon">🎓</div>
-          <div>
-            <div class="float-title">NUT Lagos members</div>
-            <div class="float-sub">Serving teachers since 1931</div>
-          </div>
-        </div>
+      <div class="metric-card">
+        <div class="metric-num">~30 mins</div>
+        <div class="metric-label">Loan disbursement after approval</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num">Zero</div>
+        <div class="metric-label">Collateral required</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num">24 hrs</div>
+        <div class="metric-label">Account approval time</div>
       </div>
     </div>
   </div>
 
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat-item">
-      <div class="stat-number">45,000+</div>
-      <div class="stat-label">NUT Lagos Chapter members</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-number">98%</div>
-      <div class="stat-label">Member satisfaction</div>
-    </div>
-  </div>
-
-  <!-- SERVICES -->
-  <div id="services">
+  <div class="services-wrap" id="services">
     <div class="section">
       <div class="section-label">What we offer</div>
       <div class="section-title">Everything a Lagos teacher needs,<br/>in one place</div>
       <p class="section-sub">Three powerful financial services designed around NUT Lagos Chapter members.</p>
-
       <div class="services-grid">
         <div class="service-card">
           <span class="service-icon">💰</span>
@@ -856,7 +652,6 @@
     </div>
   </div>
 
-  <!-- TESTIMONIALS -->
   <div class="testi-section">
     <div class="testi-inner">
       <div class="section-label">Member stories</div>
@@ -900,7 +695,6 @@
     </div>
   </div>
 
-  <!-- HOW IT WORKS -->
   <div id="how">
     <div class="how-section">
       <div class="section-label">How it works</div>
@@ -931,11 +725,10 @@
     </div>
   </div>
 
-  <!-- CTA -->
   <div class="cta-section">
     <div class="cta-logo-row">
       <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
-      <div class="cta-logo-text">
+      <div>
         <div class="cta-logo-name">NUT Lagos</div>
         <div class="cta-logo-sub">Financial Hub</div>
       </div>
@@ -948,7 +741,6 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-logo">
       <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
