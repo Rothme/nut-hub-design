@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUT Financial Hub — Application Submitted</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f0faf5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 24px 48px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #1a7a4a, #0f5233);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 28px;
+      animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f2419;
+      letter-spacing: -0.025em;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #5a8a6a;
+      line-height: 1.6;
+      margin-bottom: 36px;
+      max-width: 360px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Timeline */
+    .timeline {
+      text-align: left;
+      margin-bottom: 36px;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px dashed #eaf3ec;
+      position: relative;
+    }
+
+    .timeline-item:last-child { border-bottom: none; }
+
+    .timeline-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .timeline-icon.done { background: #f0faf5; }
+    .timeline-icon.pending { background: #fff8e6; }
+    .timeline-icon.upcoming { background: #f5f5f5; }
+
+    .timeline-content { flex: 1; }
+
+    .timeline-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f2419;
+      margin-bottom: 3px;
+    }
+
+    .timeline-sub {
+      font-size: 12px;
+      color: #9ab8a4;
+      line-height: 1.5;
+    }
+
+    .timeline-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    .badge-done {
+      background: #f0faf5;
+      color: #1a7a4a;
+    }
+
+    .badge-pending {
+      background: #fff8e6;
+      color: #a07020;
+    }
+
+    .badge-upcoming {
+      background: #f5f5f5;
+      color: #9ab8a4;
+    }
+
+    /* Info box */
+    .info-box {
+      background: #f0faf5;
+      border: 1px solid #c8e6d4;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .info-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a7a4a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #3a6a4a;
+      margin-bottom: 6px;
+    }
+
+    .info-item:last-child { margin-bottom: 0; }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 13px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      margin-bottom: 10px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: #1a7a4a;
+      color: white;
+    }
+
+    .btn-primary:hover { background: #155f3a; }
+
+    .btn-ghost {
+      background: #f0faf5;
+      color: #4a7a5a;
+    }
+
+    .btn-ghost:hover { background: #d4e8dc; }
+
+    .footer-note {
+      font-size: 12px;
+      color: #9ab8a4;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    .footer-note a {
+      color: #1a7a4a;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 36px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <div class="success-icon">✅</div>
+
+    <h1>Application submitted!</h1>
+    <p class="subtitle">
+      Your NUT Financial Hub account application has been received. Your branch officer will review it within 24 hours.
+    </p>
+
+    <!-- Timeline -->
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-icon done">📝</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Application submitted</div>
+          <div class="timeline-sub">Your details have been received successfully</div>
+        </div>
+        <div class="timeline-badge badge-done">Done</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-icon pending">👀</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Admin review</div>
+          <div class="timeline-sub">Your branch officer is reviewing your application</div>
+        </div>
+        <div class="timeline-badge badge-pending">In progress</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-icon upcoming">📱</div>
+        <div class="timeline-content">
+          <div class="timeline-title">SMS notification</div>
+          <div class="timeline-sub">You will receive an SMS once approved</div>
+        </div>
+        <div class="timeline-badge badge-upcoming">Upcoming</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-icon upcoming">🎉</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Full access granted</div>
+          <div class="timeline-sub">Sign in and complete KYC to access all services</div>
+        </div>
+        <div class="timeline-badge badge-upcoming">Upcoming</div>
+      </div>
+    </div>
+
+    <!-- What to expect -->
+    <div class="info-box">
+      <div class="info-title">📋 What happens next</div>
+      <div class="info-item">✅ Review takes 24 — 48 hours on business days</div>
+      <div class="info-item">✅ You will get an SMS on your registered number</div>
+      <div class="info-item">✅ Sign in and complete BVN + ID verification</div>
+      <div class="info-item">✅ Full access to loans, savings and insurance</div>
+    </div>
+
+    <a class="btn btn-primary" href="login.html">
+      Sign in when approved →
+    </a>
+
+    <a class="btn btn-ghost" href="index.html">
+      ← Back to home
+    </a>
+
+    <p class="footer-note">
+      Questions? Contact your branch officer or email
+      <a href="mailto:support@nutfinancialhub.org.ng">support@nutfinancialhub.org.ng</a>
+    </p>
+
+  </div>
+
+</body>
+</html>
