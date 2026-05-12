@@ -624,10 +624,12 @@
     import {
       signInWithEmailAndPassword,
       signOut,
-      onAuthStateChanged
+      onAuthStateChanged,
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
-      collection, getDocs, doc, updateDoc, query, orderBy
+      collection, getDocs, doc, updateDoc, setDoc, query, orderBy
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     let allApplications = [];
@@ -860,24 +862,85 @@
     };
 
     // ── Approve ──
-    window.approveApplication = async function (id) {
+   window.approveApplication = async function (id) {
       if (!confirm('Approve this application?')) return;
+
+      const app = allApplications.find(a => a.id === id);
+      if (!app) return;
+
+      if (!app.email) {
+        alert('This applicant did not provide an email address. Cannot create login account. Please contact them to update their application.');
+        return;
+      }
+
       try {
+        // Step 1 — Create Firebase Auth account for member
+        const tempPassword = 'NUT@' + Math.random().toString(36).slice(-8);
+        let uid = null;
+
+        try {
+          const userCredential = await createUserWithEmailAndPassword(auth, app.email, tempPassword);
+          uid = userCredential.user.uid;
+        } catch (authErr) {
+          if (authErr.code === 'auth/email-already-in-use') {
+            // Account already exists — still approve
+            console.log('Auth account already exists for this email');
+          } else {
+            throw authErr;
+          }
+        }
+
+        // Step 2 — Send password reset email so member sets their own password
+        await sendPasswordResetEmail(auth, app.email);
+
+        // Step 3 — Save member profile to Firestore members collection
+        if (uid) {
+          await setDoc(doc(db, 'members', uid), {
+            fullName: app.fullName,
+            firstName: app.firstName,
+            lastName: app.lastName,
+            phone: app.phone,
+            email: app.email,
+            dob: app.dob,
+            gender: app.gender,
+            address: app.address,
+            nutNumber: app.nutNumber,
+            schoolName: app.schoolName,
+            state: app.state,
+            lga: app.lga,
+            jobTitle: app.jobTitle,
+            yearsService: app.yearsService,
+            salary: app.salary,
+            nokName: app.nokName,
+            nokRelation: app.nokRelation,
+            nokPhone: app.nokPhone,
+            kycStatus: 'pending',
+            walletBalance: 0,
+            memberId: 'NUT-' + app.state.substring(0,2).toUpperCase() + '-' + Date.now().toString().slice(-6),
+            status: 'approved',
+            approvedAt: new Date().toISOString(),
+          });
+        }
+
+        // Step 4 — Update application status
         await updateDoc(doc(db, 'applications', id), {
           status: 'approved',
           reviewedAt: new Date().toISOString(),
+          uid: uid,
         });
-        const app = allApplications.find(a => a.id === id);
-        if (app) app.status = 'approved';
+
+        app.status = 'approved';
         updateStats();
         const filtered = currentFilter === 'all'
           ? allApplications
           : allApplications.filter(a => a.status === currentFilter);
         renderTable(filtered);
-        alert('Application approved. Member will be notified by SMS.');
+
+        alert('✅ Application approved!\n\nA login account has been created for ' + app.fullName + '.\n\nA password reset email has been sent to ' + app.email + ' so they can set their own password and log in.');
+
       } catch (err) {
         console.error(err);
-        alert('Error approving application. Please try again.');
+        alert('Error approving application: ' + err.message);
       }
     };
 
