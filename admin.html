@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUT Financial Hub — Admin Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f0faf5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── AUTH GATE ── */
+    .auth-gate {
+      position: fixed;
+      inset: 0;
+      background: #f0faf5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 999;
+    }
+
+    .auth-card {
+      background: white;
+      border-radius: 24px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 24px 48px rgba(0,0,0,0.06);
+    }
+
+    .auth-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #1a7a4a, #0f5233);
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f2419;
+    }
+
+    .logo-text span { font-weight: 500; color: #5a8a6a; }
+
+    .auth-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: #fff8e6;
+      border: 1px solid #f5d98a;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #a07020;
+      margin-bottom: 20px;
+    }
+
+    .auth-card h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f2419;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .auth-sub {
+      font-size: 13px;
+      color: #6b8a75;
+      margin-bottom: 28px;
+    }
+
+    .label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #4a7a5a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 7px;
+    }
+
+    .field { margin-bottom: 16px; }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1.5px solid #d4e8dc;
+      border-radius: 11px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #0f2419;
+      background: white;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input:focus { border-color: #1a7a4a; }
+
+    .error {
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      color: #cc0000;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: #1a7a4a;
+      color: white;
+      border: none;
+      border-radius: 13px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-login:hover { background: #155f3a; }
+
+    /* ── MAIN LAYOUT ── */
+    .main { display: none; }
+
+    /* Topbar */
+    .topbar {
+      background: white;
+      border-bottom: 1px solid #eaf3ec;
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f2419;
+      letter-spacing: -0.02em;
+    }
+
+    .admin-badge {
+      padding: 4px 10px;
+      background: #fff8e6;
+      border: 1px solid #f5d98a;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #a07020;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #4a7a5a;
+    }
+
+    .btn-signout {
+      padding: 8px 16px;
+      background: #f0faf5;
+      color: #4a7a5a;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-signout:hover { background: #d4e8dc; }
+
+    /* Content */
+    .content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid #eaf3ec;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #7aaa8a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: #0f2419;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-value.green { color: #1a7a4a; }
+    .stat-value.amber { color: #d4820a; }
+    .stat-value.red { color: #cc3300; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: white;
+      border: 1px solid #eaf3ec;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+      width: fit-content;
+    }
+
+    .tab {
+      padding: 8px 18px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #7aaa8a;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .tab.active {
+      background: #1a7a4a;
+      color: white;
+    }
+
+    /* Applications table */
+    .table-card {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #eaf3ec;
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #eaf3ec;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .table-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f2419;
+    }
+
+    .table-count {
+      font-size: 13px;
+      color: #7aaa8a;
+      font-weight: 600;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead tr {
+      background: #f7fdf9;
+      border-bottom: 1px solid #eaf3ec;
+    }
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      color: #7aaa8a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    td {
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #0f2419;
+      border-bottom: 1px dashed #eaf3ec;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tr:hover td { background: #fafffe; }
+
+    .td-name { font-weight: 700; }
+
+    .td-sub {
+      font-size: 11px;
+      color: #9ab8a4;
+      margin-top: 2px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-pending { background: #fff8e6; color: #a07020; }
+    .badge-approved { background: #f0faf5; color: #1a7a4a; }
+    .badge-rejected { background: #fff0f0; color: #cc3300; }
+
+    .action-btns {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-approve {
+      padding: 7px 14px;
+      background: #1a7a4a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-approve:hover { background: #155f3a; }
+
+    .btn-reject {
+      padding: 7px 14px;
+      background: #fff0f0;
+      color: #cc3300;
+      border: 1px solid #ffcccc;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-reject:hover { background: #ffe0e0; }
+
+    .btn-view {
+      padding: 7px 14px;
+      background: #f0faf5;
+      color: #4a7a5a;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-view:hover { background: #d4e8dc; }
+
+    .empty-state {
+      padding: 60px 20px;
+      text-align: center;
+      color: #9ab8a4;
+    }
+
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-text { font-size: 15px; font-weight: 600; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 200;
+      display: none;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f2419;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #f0faf5;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .detail-item {}
+
+    .detail-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #7aaa8a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f2419;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      padding-top: 20px;
+      border-top: 1px solid #eaf3ec;
+    }
+
+    .loading-row {
+      padding: 40px;
+      text-align: center;
+      color: #9ab8a4;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .content { padding: 20px 16px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .topbar { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AUTH GATE -->
+  <div class="auth-gate" id="authGate">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-icon">N·</div>
+        <div class="logo-text">NUT <span>Financial Hub</span></div>
+      </div>
+      <div class="auth-badge">🔐 Admin portal</div>
+      <h2>Branch officer sign in</h2>
+      <p class="auth-sub">This portal is restricted to authorised NUT branch officers only.</p>
+
+      <div class="field">
+        <label class="label">Email address</label>
+        <input type="email" id="adminEmail" placeholder="officer@nut.org.ng" />
+      </div>
+      <div class="field">
+        <label class="label">Password</label>
+        <input type="password" id="adminPassword" placeholder="••••••••" />
+      </div>
+
+      <div class="error" id="authError"></div>
+
+      <button class="btn-login" onclick="adminLogin()">Sign in to portal</button>
+    </div>
+  </div>
+
+  <!-- MAIN PORTAL -->
+  <div class="main" id="mainPortal">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="logo-icon">N·</div>
+        <div class="topbar-title">NUT Financial Hub</div>
+        <div class="admin-badge">Admin Portal</div>
+      </div>
+      <div class="topbar-right">
+        <div class="admin-name" id="adminName">Branch Officer</div>
+        <button class="btn-signout" onclick="adminSignOut()">Sign out</button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total applications</div>
+          <div class="stat-value" id="statTotal">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending review</div>
+          <div class="stat-value amber" id="statPending">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Approved</div>
+          <div class="stat-value green" id="statApproved">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Rejected</div>
+          <div class="stat-value red" id="statRejected">—</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="filterApplications('all', this)">All</button>
+        <button class="tab" onclick="filterApplications('pending', this)">Pending</button>
+        <button class="tab" onclick="filterApplications('approved', this)">Approved</button>
+        <button class="tab" onclick="filterApplications('rejected', this)">Rejected</button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Member applications</div>
+          <div class="table-count" id="tableCount">Loading...</div>
+        </div>
+        <div id="tableBody">
+          <div class="loading-row">Loading applications...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DETAIL MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Application detail</div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modalContent"></div>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db } from './js/firebase.js';
+    import {
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      collection, getDocs, doc, updateDoc, query, orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    let allApplications = [];
+    let currentFilter = 'all';
+
+    // ── Auth ──
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('authGate').style.display = 'none';
+        document.getElementById('mainPortal').style.display = 'block';
+        document.getElementById('adminName').textContent = user.email;
+        loadApplications();
+      } else {
+        document.getElementById('authGate').style.display = 'flex';
+        document.getElementById('mainPortal').style.display = 'none';
+      }
+    });
+
+    window.adminLogin = async function () {
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value;
+      const errorBox = document.getElementById('authError');
+      errorBox.style.display = 'none';
+
+      if (!email || !password) {
+        errorBox.textContent = 'Please enter your email and password.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        errorBox.textContent = 'Invalid credentials. Please check and try again.';
+        errorBox.style.display = 'block';
+      }
+    };
+
+    window.adminSignOut = async function () {
+      await signOut(auth);
+    };
+
+    // ── Load applications ──
+    async function loadApplications() {
+      try {
+        const q = query(collection(db, 'applications'), orderBy('submittedAt', 'desc'));
+        const snapshot = await getDocs(q);
+        allApplications = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        updateStats();
+        renderTable(allApplications);
+      } catch (err) {
+        console.error(err);
+        document.getElementById('tableBody').innerHTML =
+          '<div class="loading-row">Error loading applications. Please refresh.</div>';
+      }
+    }
+
+    function updateStats() {
+      const total = allApplications.length;
+      const pending = allApplications.filter(a => a.status === 'pending').length;
+      const approved = allApplications.filter(a => a.status === 'approved').length;
+      const rejected = allApplications.filter(a => a.status === 'rejected').length;
+      document.getElementById('statTotal').textContent = total;
+      document.getElementById('statPending').textContent = pending;
+      document.getElementById('statApproved').textContent = approved;
+      document.getElementById('statRejected').textContent = rejected;
+    }
+
+    // ── Filter ──
+    window.filterApplications = function (filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      const filtered = filter === 'all'
+        ? allApplications
+        : allApplications.filter(a => a.status === filter);
+      renderTable(filtered);
+    };
+
+    // ── Render table ──
+    function renderTable(apps) {
+      document.getElementById('tableCount').textContent = apps.length + ' records';
+
+      if (apps.length === 0) {
+        document.getElementById('tableBody').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <div class="empty-text">No applications found</div>
+          </div>`;
+        return;
+      }
+
+      const rows = apps.map(app => `
+        <tr>
+          <td>
+            <div class="td-name">${app.fullName || '—'}</div>
+            <div class="td-sub">${app.phone || '—'}</div>
+          </td>
+          <td>
+            <div>${app.schoolName || '—'}</div>
+            <div class="td-sub">${app.state || ''} · ${app.lga || ''}</div>
+          </td>
+          <td>${app.nutNumber || '—'}</td>
+          <td>${app.jobTitle || '—'}</td>
+          <td>${app.submittedAt ? new Date(app.submittedAt).toLocaleDateString('en-NG') : '—'}</td>
+          <td>
+            <span class="badge badge-${app.status || 'pending'}">
+              ${app.status === 'approved' ? '✅' : app.status === 'rejected' ? '❌' : '⏳'}
+              ${app.status || 'pending'}
+            </span>
+          </td>
+          <td>
+            <div class="action-btns">
+              <button class="btn-view" onclick="viewApplication('${app.id}')">View</button>
+              ${app.status === 'pending' ? `
+                <button class="btn-approve" onclick="approveApplication('${app.id}')">Approve</button>
+                <button class="btn-reject" onclick="rejectApplication('${app.id}')">Reject</button>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      document.getElementById('tableBody').innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Applicant</th>
+              <th>School</th>
+              <th>NUT Number</th>
+              <th>Job title</th>
+              <th>Submitted</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    // ── View detail ──
+    window.viewApplication = function (id) {
+      const app = allApplications.find(a => a.id === id);
+      if (!app) return;
+
+      document.getElementById('modalContent').innerHTML = `
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="detail-label">Full name</div>
+            <div class="detail-value">${app.fullName || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Phone</div>
+            <div class="detail-value">${app.phone || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Email</div>
+            <div class="detail-value">${app.email || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Date of birth</div>
+            <div class="detail-value">${app.dob || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Gender</div>
+            <div class="detail-value">${app.gender || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">NUT number</div>
+            <div class="detail-value">${app.nutNumber || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">School</div>
+            <div class="detail-value">${app.schoolName || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">State / LGA</div>
+            <div class="detail-value">${app.state || '—'} · ${app.lga || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Job title</div>
+            <div class="detail-value">${app.jobTitle || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Years of service</div>
+            <div class="detail-value">${app.yearsService || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Monthly salary</div>
+            <div class="detail-value">₦${Number(app.salary || 0).toLocaleString()}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Status</div>
+            <div class="detail-value">
+              <span class="badge badge-${app.status || 'pending'}">
+                ${app.status || 'pending'}
+              </span>
+            </div>
+          </div>
+          <div class="detail-item" style="grid-column: 1/-1">
+            <div class="detail-label">Address</div>
+            <div class="detail-value">${app.address || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Next of kin</div>
+            <div class="detail-value">${app.nokName || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">NOK phone</div>
+            <div class="detail-value">${app.nokPhone || '—'}</div>
+          </div>
+        </div>`;
+
+      document.getElementById('modalActions').innerHTML = app.status === 'pending' ? `
+        <button class="btn-approve" style="flex:1;padding:12px" onclick="approveApplication('${app.id}');closeModal()">
+          ✅ Approve application
+        </button>
+        <button class="btn-reject" style="flex:1;padding:12px" onclick="rejectApplication('${app.id}');closeModal()">
+          ❌ Reject application
+        </button>` : `
+        <div style="font-size:13px;color:#7aaa8a;font-weight:600">
+          This application has been ${app.status}.
+        </div>`;
+
+      document.getElementById('modalOverlay').style.display = 'flex';
+    };
+
+    window.closeModal = function () {
+      document.getElementById('modalOverlay').style.display = 'none';
+    };
+
+    // ── Approve ──
+    window.approveApplication = async function (id) {
+      if (!confirm('Approve this application?')) return;
+      try {
+        await updateDoc(doc(db, 'applications', id), {
+          status: 'approved',
+          reviewedAt: new Date().toISOString(),
+        });
+        const app = allApplications.find(a => a.id === id);
+        if (app) app.status = 'approved';
+        updateStats();
+        const filtered = currentFilter === 'all'
+          ? allApplications
+          : allApplications.filter(a => a.status === currentFilter);
+        renderTable(filtered);
+        alert('Application approved. Member will be notified by SMS.');
+      } catch (err) {
+        console.error(err);
+        alert('Error approving application. Please try again.');
+      }
+    };
+
+    // ── Reject ──
+    window.rejectApplication = async function (id) {
+      if (!confirm('Reject this application?')) return;
+      try {
+        await updateDoc(doc(db, 'applications', id), {
+          status: 'rejected',
+          reviewedAt: new Date().toISOString(),
+        });
+        const app = allApplications.find(a => a.id === id);
+        if (app) app.status = 'rejected';
+        updateStats();
+        const filtered = currentFilter === 'all'
+          ? allApplications
+          : allApplications.filter(a => a.status === currentFilter);
+        renderTable(filtered);
+        alert('Application rejected.');
+      } catch (err) {
+        console.error(err);
+        alert('Error rejecting application. Please try again.');
+      }
+    };
+  </script>
+
+</body>
+</html>
