@@ -569,19 +569,19 @@
           </div>
         </div>
 
-        <div class="checkbox-row">
-          <input type="checkbox" id="termsCheck" />
-          <label class="checkbox-label" for="termsCheck">
-            I agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>. I confirm that all information provided is accurate and belongs to me.
-          </label>
-        </div>
+        <div class="checkbox-row" style="cursor:pointer" onclick="document.getElementById('termsCheck').click()">
+  <input type="checkbox" id="termsCheck" onclick="event.stopPropagation()" />
+  <label class="checkbox-label" style="cursor:pointer">
+    I agree to the <a href="#" onclick="event.stopPropagation()">Terms of Use</a> and <a href="#" onclick="event.stopPropagation()">Privacy Policy</a>. I confirm that all information provided is accurate and belongs to me.
+  </label>
+</div>
 
-        <div class="checkbox-row">
-          <input type="checkbox" id="debitCheck" />
-          <label class="checkbox-label" for="debitCheck">
-            I authorise NUT Financial Hub to deduct loan repayments and savings contributions from my salary account as agreed.
-          </label>
-        </div>
+<div class="checkbox-row" style="cursor:pointer" onclick="document.getElementById('debitCheck').click()">
+  <input type="checkbox" id="debitCheck" onclick="event.stopPropagation()" />
+  <label class="checkbox-label" style="cursor:pointer">
+    I authorise NUT Financial Hub to deduct loan repayments and savings contributions from my salary account as agreed.
+  </label>
+</div>
 
         <div class="btn-row">
           <button class="btn btn-back" onclick="goToStep2()">← Back</button>
