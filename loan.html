@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUT Lagos — Loans</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0faf5; color: #0f2419; -webkit-font-smoothing: antialiased; }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #1a7a4a 0%, #0f5233 100%);
+      padding: 20px 20px 32px;
+    }
+    .header-top {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+    }
+    .header-logo { display: flex; align-items: center; gap: 10px; }
+    .header-logo img { width: 36px; height: 36px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.9; }
+    .header-logo-text { font-size: 14px; font-weight: 800; color: white; letter-spacing: -0.02em; }
+    .back-btn {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.12); border: none; border-radius: 8px;
+      padding: 8px 12px; cursor: pointer; font-family: inherit;
+      text-decoration: none;
+    }
+    .page-title { font-size: 26px; font-weight: 800; color: white; letter-spacing: -0.025em; margin-bottom: 4px; }
+    .page-sub { font-size: 14px; color: rgba(255,255,255,0.7); }
+
+    /* ── ACTIVE LOAN BANNER ── */
+    .active-loan-banner {
+      margin: -16px 16px 0; background: white; border-radius: 16px;
+      padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      margin-bottom: 20px; display: none;
+    }
+    .alb-label { font-size: 11px; font-weight: 700; color: #7aaa8a; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .alb-title { font-size: 15px; font-weight: 800; color: #0f2419; margin-bottom: 10px; }
+    .alb-row { display: flex; gap: 12px; }
+    .alb-stat { flex: 1; background: #f7fdf9; border-radius: 10px; padding: 10px; text-align: center; }
+    .alb-stat-num { font-size: 16px; font-weight: 800; color: #1a7a4a; }
+    .alb-stat-label { font-size: 10px; color: #7aaa8a; font-weight: 600; margin-top: 2px; }
+
+    /* ── CONTENT ── */
+    .content { padding: 20px 16px 100px; }
+
+    .section-title { font-size: 16px; font-weight: 800; color: #0f2419; margin-bottom: 14px; }
+
+    /* ── PRODUCT CARDS ── */
+    .products-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+
+    .product-card {
+      background: white; border-radius: 18px; padding: 20px;
+      border: 1px solid #eaf3ec; transition: all 0.2s; cursor: pointer;
+    }
+    .product-card:hover { border-color: #c8e6d4; box-shadow: 0 4px 16px rgba(26,122,74,0.08); }
+
+    .product-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .product-icon-wrap {
+      width: 48px; height: 48px; border-radius: 14px; background: #f0faf5;
+      display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
+    }
+    .product-info { flex: 1; }
+    .product-name { font-size: 17px; font-weight: 800; color: #0f2419; margin-bottom: 4px; letter-spacing: -0.02em; }
+    .product-desc { font-size: 13px; color: #5a8a6a; line-height: 1.5; }
+    .product-rate-badge {
+      padding: 5px 12px; background: #f0faf5; border-radius: 999px;
+      font-size: 12px; font-weight: 700; color: #1a7a4a; white-space: nowrap;
+    }
+
+    .product-details { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .product-detail-item { background: #f7fdf9; border-radius: 10px; padding: 10px; text-align: center; }
+    .product-detail-num { font-size: 13px; font-weight: 800; color: #0f2419; }
+    .product-detail-label { font-size: 10px; color: #7aaa8a; font-weight: 600; margin-top: 2px; }
+
+    .btn-apply {
+      width: 100%; padding: 14px; background: #1a7a4a; color: white;
+      border: none; border-radius: 12px; font-family: inherit;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-apply:hover { background: #155f3a; }
+
+    /* ── KYC BLOCKED ── */
+    .kyc-block {
+      background: #fff8e6; border: 1px solid #f5d98a; border-radius: 16px;
+      padding: 20px; margin-bottom: 20px; display: none;
+    }
+    .kyc-block-title { font-size: 15px; font-weight: 700; color: #a07020; margin-bottom: 6px; }
+    .kyc-block-sub { font-size: 13px; color: #7a5200; line-height: 1.5; margin-bottom: 14px; }
+    .btn-kyc {
+      padding: 12px 20px; background: #f5a623; color: white;
+      border: none; border-radius: 10px; font-family: inherit;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+
+    /* ── EMPTY ── */
+    .empty-state {
+      text-align: center; padding: 60px 20px; color: #9ab8a4;
+    }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-text { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #5a8a6a; }
+    .empty-sub { font-size: 13px; color: #9ab8a4; }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: white; border-top: 1px solid #eaf3ec;
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      padding: 8px 0 12px; z-index: 100;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      cursor: pointer; padding: 4px; border: none; background: none; font-family: inherit;
+    }
+    .nav-icon { font-size: 22px; }
+    .nav-label { font-size: 10px; font-weight: 600; color: #9ab8a4; }
+    .nav-item.active .nav-label { color: #1a7a4a; }
+    .nav-dot { width: 4px; height: 4px; border-radius: 50%; background: #1a7a4a; opacity: 0; }
+    .nav-item.active .nav-dot { opacity: 1; }
+
+    /* ── LOADING ── */
+    .loading-screen {
+      position: fixed; inset: 0; background: #f0faf5;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px; z-index: 999;
+    }
+    .loading-logo {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, #1a7a4a, #0f5233);
+      border-radius: 16px; display: flex; align-items: center;
+      justify-content: center; color: white; font-weight: 800; font-size: 22px;
+    }
+    .loading-spinner {
+      width: 28px; height: 28px; border: 3px solid #d4e8dc;
+      border-top-color: #1a7a4a; border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-logo">N·</div>
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div class="header">
+    <div class="header-top">
+      <div class="header-logo">
+        <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
+        <div class="header-logo-text">NUT Lagos</div>
+      </div>
+      <a class="back-btn" href="dashboard.html">← Dashboard</a>
+    </div>
+    <div class="page-title">Loans</div>
+    <div class="page-sub">Apply for a cooperative loan</div>
+  </div>
+
+  <!-- Active loan summary -->
+  <div class="active-loan-banner" id="activeLoanBanner">
+    <div class="alb-label">Your active loan</div>
+    <div class="alb-title" id="albTitle">—</div>
+    <div class="alb-row">
+      <div class="alb-stat">
+        <div class="alb-stat-num" id="albOutstanding">—</div>
+        <div class="alb-stat-label">Outstanding</div>
+      </div>
+      <div class="alb-stat">
+        <div class="alb-stat-num" id="albMonthly">—</div>
+        <div class="alb-stat-label">Monthly</div>
+      </div>
+      <div class="alb-stat">
+        <div class="alb-stat-num" id="albStatus">—</div>
+        <div class="alb-stat-label">Status</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- KYC block -->
+    <div class="kyc-block" id="kycBlock">
+      <div class="kyc-block-title">⚠️ Complete your verification first</div>
+      <div class="kyc-block-sub">You need to complete KYC verification before you can apply for a loan. This protects you and other members.</div>
+      <button class="btn-kyc" onclick="window.location.href='kyc-bvn.html'">Complete verification →</button>
+    </div>
+
+    <div class="section-title">Available loan products</div>
+
+    <div class="products-list" id="productsList">
+      <div style="text-align:center;padding:40px;color:#9ab8a4;font-weight:600;">Loading products...</div>
+    </div>
+
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="window.location.href='dashboard.html'">
+      <div class="nav-icon">🏠</div><div class="nav-label">Home</div><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item active">
+      <div class="nav-icon">💰</div><div class="nav-label">Loans</div><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="window.location.href='savings.html'">
+      <div class="nav-icon">🏦</div><div class="nav-label">Savings</div><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="window.location.href='insurance.html'">
+      <div class="nav-icon">🛡️</div><div class="nav-label">Insurance</div><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="window.location.href='profile.html'">
+      <div class="nav-icon">👤</div><div class="nav-label">Profile</div><div class="nav-dot"></div>
+    </button>
+  </nav>
+
+  <script type="module">
+    import { auth, db } from './js/firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      collection, getDocs, doc, getDoc, query, where, orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    let memberData = null;
+    let activeLoans = [];
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'login.html'; return; }
+
+      try {
+        const memberDoc = await getDoc(doc(db, 'members', user.uid));
+        if (memberDoc.exists()) {
+          memberData = memberDoc.data();
+        }
+
+        // Check KYC
+        if (memberData && memberData.kycStatus !== 'verified') {
+          document.getElementById('kycBlock').style.display = 'block';
+        }
+
+        // Load active loans
+        const loansQuery = query(
+          collection(db, 'loans'),
+          where('uid', '==', user.uid),
+          where('status', 'in', ['approved', 'disbursed', 'overdue'])
+        );
+        const loansSnap = await getDocs(loansQuery);
+        activeLoans = loansSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        // Show active loan banner
+        if (activeLoans.length > 0) {
+          const latest = activeLoans[0];
+          document.getElementById('activeLoanBanner').style.display = 'block';
+          document.getElementById('albTitle').textContent = latest.productName + ' — ₦' + Number(latest.amount).toLocaleString();
+          document.getElementById('albOutstanding').textContent = '₦' + Number(latest.outstandingBalance || latest.totalRepayable || 0).toLocaleString();
+          document.getElementById('albMonthly').textContent = '₦' + Number(latest.monthlyInstalment || 0).toLocaleString();
+          document.getElementById('albStatus').textContent = latest.status;
+        }
+
+        // Load products
+        await loadProducts(user.uid);
+
+      } catch (err) {
+        console.error(err);
+      }
+
+      document.getElementById('loadingScreen').style.display = 'none';
+    });
+
+    async function loadProducts(uid) {
+      try {
+        const snap = await getDocs(collection(db, 'loanProducts'));
+        const products = snap.docs
+          .map(d => ({ id: d.id, ...d.data() }))
+          .filter(p => p.isActive);
+
+        if (!products.length) {
+          document.getElementById('productsList').innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">💰</div>
+              <div class="empty-text">No loan products available</div>
+              <div class="empty-sub">Check back soon — your branch is setting up loan products.</div>
+            </div>`;
+          return;
+        }
+
+        document.getElementById('productsList').innerHTML = products.map(p => {
+          const tenures = p.tenures.split(',').map(t => t.trim()).join(', ');
+          return `
+            <div class="product-card">
+              <div class="product-top">
+                <div class="product-icon-wrap">${p.icon || '💰'}</div>
+                <div class="product-info">
+                  <div class="product-name">${p.name}</div>
+                  <div class="product-desc">${p.description || ''}</div>
+                </div>
+                <div class="product-rate-badge">${p.rate}%/mo</div>
+              </div>
+              <div class="product-details">
+                <div class="product-detail-item">
+                  <div class="product-detail-num">₦${Number(p.maxAmount).toLocaleString()}</div>
+                  <div class="product-detail-label">Max amount</div>
+                </div>
+                <div class="product-detail-item">
+                  <div class="product-detail-num">${tenures} mo</div>
+                  <div class="product-detail-label">Tenures</div>
+                </div>
+                <div class="product-detail-item">
+                  <div class="product-detail-num">${p.interestType === 'reducing' ? 'Reducing' : 'Flat'}</div>
+                  <div class="product-detail-label">Rate type</div>
+                </div>
+              </div>
+              <button class="btn-apply" onclick="applyForLoan('${p.id}')">
+                Apply now →
+              </button>
+            </div>`;
+        }).join('');
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById('productsList').innerHTML = '<div style="text-align:center;padding:40px;color:#cc0000">Error loading products. Please refresh.</div>';
+      }
+    }
+
+    window.applyForLoan = function (productId) {
+      if (memberData && memberData.kycStatus !== 'verified') {
+        alert('Please complete your KYC verification before applying for a loan.');
+        return;
+      }
+      sessionStorage.setItem('selectedProductId', productId);
+      window.location.href = 'loan-apply.html';
+    };
+  </script>
+
+</body>
+</html>
