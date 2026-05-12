@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUT Lagos — Loan Application</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0faf5; color: #0f2419; -webkit-font-smoothing: antialiased; }
+
+    .header {
+      background: linear-gradient(135deg, #1a7a4a 0%, #0f5233 100%);
+      padding: 20px 20px 28px;
+    }
+    .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .header-logo { display: flex; align-items: center; gap: 10px; }
+    .header-logo img { width: 36px; height: 36px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.9; }
+    .header-logo-text { font-size: 14px; font-weight: 800; color: white; }
+    .back-btn {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.12); border: none; border-radius: 8px;
+      padding: 8px 12px; cursor: pointer; font-family: inherit; text-decoration: none;
+    }
+    .page-title { font-size: 24px; font-weight: 800; color: white; letter-spacing: -0.025em; margin-bottom: 2px; }
+    .page-sub { font-size: 13px; color: rgba(255,255,255,0.7); }
+
+    .content { padding: 20px 16px 100px; }
+
+    /* ── PRODUCT SUMMARY ── */
+    .product-summary {
+      background: white; border-radius: 18px; padding: 18px;
+      border: 1px solid #eaf3ec; margin-bottom: 18px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .ps-icon { font-size: 32px; }
+    .ps-name { font-size: 16px; font-weight: 800; color: #0f2419; margin-bottom: 3px; }
+    .ps-rate { font-size: 13px; color: #1a7a4a; font-weight: 700; }
+
+    /* ── CARD ── */
+    .card {
+      background: white; border-radius: 18px; padding: 20px;
+      border: 1px solid #eaf3ec; margin-bottom: 16px;
+    }
+    .card-title { font-size: 15px; font-weight: 800; color: #0f2419; margin-bottom: 16px; }
+
+    /* ── AMOUNT SLIDER ── */
+    .amount-display {
+      text-align: center; margin-bottom: 16px;
+    }
+    .amount-num {
+      font-size: 36px; font-weight: 800; color: #1a7a4a;
+      letter-spacing: -0.03em;
+    }
+    .amount-naira { font-size: 22px; opacity: 0.6; margin-right: 2px; }
+
+    input[type="range"] {
+      width: 100%; height: 6px; border-radius: 3px;
+      background: #d4e8dc; outline: none; margin-bottom: 8px;
+      accent-color: #1a7a4a;
+    }
+
+    .slider-labels {
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: #9ab8a4; font-weight: 600;
+    }
+
+    /* ── TENURE ── */
+    .tenure-grid {
+      display: grid; gap: 8px; margin-bottom: 4px;
+    }
+    .tenure-btn {
+      padding: 12px; border: 1.5px solid #d4e8dc; border-radius: 12px;
+      background: white; font-family: inherit; font-size: 14px;
+      font-weight: 700; color: #4a7a5a; cursor: pointer; text-align: center;
+      transition: all 0.15s;
+    }
+    .tenure-btn:hover { border-color: #1a7a4a; background: #f0faf5; }
+    .tenure-btn.selected { border-color: #1a7a4a; background: #1a7a4a; color: white; }
+
+    /* ── SUMMARY ── */
+    .summary-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0; border-bottom: 1px dashed #eaf3ec;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-label { font-size: 13px; color: #6b8a75; font-weight: 600; }
+    .summary-value { font-size: 14px; font-weight: 800; color: #0f2419; }
+    .summary-value.green { color: #1a7a4a; }
+    .summary-value.red { color: #cc3300; }
+
+    /* ── CAPACITY ── */
+    .capacity-bar-wrap { margin: 14px 0 6px; }
+    .capacity-label {
+      display: flex; justify-content: space-between;
+      font-size: 12px; font-weight: 700; margin-bottom: 6px;
+    }
+    .capacity-bar-bg {
+      height: 8px; background: #eaf3ec; border-radius: 999px; overflow: hidden;
+    }
+    .capacity-bar-fill {
+      height: 100%; border-radius: 999px; background: #1a7a4a;
+      transition: width 0.3s ease;
+    }
+    .capacity-bar-fill.warn { background: #f5a623; }
+    .capacity-bar-fill.danger { background: #cc3300; }
+    .capacity-note {
+      font-size: 12px; color: #5a8a6a; margin-top: 6px; line-height: 1.5;
+    }
+    .capacity-note.warn { color: #a07020; }
+    .capacity-note.danger { color: #cc3300; }
+
+    /* ── SUGGESTION BOX ── */
+    .suggestion-box {
+      background: #fff8e6; border: 1px solid #f5d98a;
+      border-radius: 12px; padding: 14px; margin-top: 12px; display: none;
+    }
+    .suggestion-box-title { font-size: 13px; font-weight: 700; color: #a07020; margin-bottom: 6px; }
+    .suggestion-box-text { font-size: 12px; color: #7a5200; line-height: 1.5; }
+
+    /* ── SUBMIT ── */
+    .btn-submit {
+      width: 100%; padding: 16px; background: #1a7a4a; color: white;
+      border: none; border-radius: 14px; font-family: inherit;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      transition: background 0.15s; margin-top: 8px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-submit:hover { background: #155f3a; }
+    .btn-submit:disabled { background: #a0c4b0; cursor: not-allowed; }
+
+    .error {
+      background: #fff0f0; border: 1px solid #ffcccc; color: #cc0000;
+      padding: 12px 14px; border-radius: 10px; font-size: 13px;
+      margin-bottom: 14px; display: none;
+    }
+
+    .spinner {
+      width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white; border-radius: 50%;
+      animation: spin 0.7s linear infinite; display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-screen {
+      position: fixed; inset: 0; background: #f0faf5;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px; z-index: 999;
+    }
+    .loading-logo {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, #1a7a4a, #0f5233);
+      border-radius: 16px; display: flex; align-items: center;
+      justify-content: center; color: white; font-weight: 800; font-size: 22px;
+    }
+    .loading-spinner {
+      width: 28px; height: 28px; border: 3px solid #d4e8dc;
+      border-top-color: #1a7a4a; border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-logo">N·</div>
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div class="header">
+    <div class="header-top">
+      <div class="header-logo">
+        <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
+        <div class="header-logo-text">NUT Lagos</div>
+      </div>
+      <a class="back-btn" href="loans.html">← Loans</a>
+    </div>
+    <div class="page-title">Loan calculator</div>
+    <div class="page-sub">Adjust amount and tenure to see your repayment</div>
+  </div>
+
+  <div class="content">
+
+    <!-- Product summary -->
+    <div class="product-summary" id="productSummary">
+      <div class="ps-icon" id="psIcon">💰</div>
+      <div>
+        <div class="ps-name" id="psName">Loading...</div>
+        <div class="ps-rate" id="psRate">—</div>
+      </div>
+    </div>
+
+    <!-- Amount selector -->
+    <div class="card">
+      <div class="card-title">How much do you need?</div>
+      <div class="amount-display">
+        <div class="amount-num"><span class="amount-naira">₦</span><span id="amountDisplay">0</span></div>
+      </div>
+      <input type="range" id="amountSlider" min="0" max="100" step="1" value="50" oninput="updateCalc()" />
+      <div class="slider-labels">
+        <span id="sliderMin">₦0</span>
+        <span id="sliderMax">₦0</span>
+      </div>
+    </div>
+
+    <!-- Tenure selector -->
+    <div class="card">
+      <div class="card-title">Choose repayment tenure</div>
+      <div class="tenure-grid" id="tenureGrid"></div>
+    </div>
+
+    <!-- Repayment summary -->
+    <div class="card">
+      <div class="card-title">Repayment summary</div>
+      <div class="summary-row">
+        <div class="summary-label">Loan amount</div>
+        <div class="summary-value" id="sumAmount">—</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Interest</div>
+        <div class="summary-value" id="sumInterest">—</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Processing fee</div>
+        <div class="summary-value" id="sumFee">—</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Total repayable</div>
+        <div class="summary-value green" id="sumTotal">—</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Monthly instalment</div>
+        <div class="summary-value green" id="sumMonthly">—</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Tenure</div>
+        <div class="summary-value" id="sumTenure">—</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Rate type</div>
+        <div class="summary-value" id="sumRateType">—</div>
+      </div>
+
+      <!-- Salary capacity bar -->
+      <div class="capacity-bar-wrap">
+        <div class="capacity-label">
+          <span>Salary capacity used</span>
+          <span id="capacityPct">0%</span>
+        </div>
+        <div class="capacity-bar-bg">
+          <div class="capacity-bar-fill" id="capacityBar" style="width:0%"></div>
+        </div>
+        <div class="capacity-note" id="capacityNote">—</div>
+      </div>
+
+      <!-- Suggestion box -->
+      <div class="suggestion-box" id="suggestionBox">
+        <div class="suggestion-box-title">💡 Suggested adjustment</div>
+        <div class="suggestion-box-text" id="suggestionText">—</div>
+      </div>
+    </div>
+
+    <div class="error" id="errorBox"></div>
+
+    <button class="btn-submit" id="submitBtn" onclick="submitLoan()">
+      <span id="btnText">Submit loan application</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+
+  </div>
+
+  <script type="module">
+    import { auth, db } from './js/firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      doc, getDoc, collection, getDocs, addDoc, query, where
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    let product = null;
+    let memberData = null;
+    let currentUser = null;
+    let selectedTenure = null;
+    let tenureOptions = [];
+    let existingMonthlyTotal = 0;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'login.html'; return; }
+      currentUser = user;
+
+      const productId = sessionStorage.getItem('selectedProductId');
+      if (!productId) { window.location.href = 'loans.html'; return; }
+
+      try {
+        // Load product
+        const productDoc = await getDoc(doc(db, 'loanProducts', productId));
+        if (!productDoc.exists()) { window.location.href = 'loans.html'; return; }
+        product = { id: productDoc.id, ...productDoc.data() };
+
+        // Load member
+        const memberDoc = await getDoc(doc(db, 'members', user.uid));
+        if (memberDoc.exists()) memberData = memberDoc.data();
+
+        // Load existing active loan instalments
+        const loansQ = query(
+          collection(db, 'loans'),
+          where('uid', '==', user.uid),
+          where('status', 'in', ['approved', 'disbursed', 'overdue'])
+        );
+        const loansSnap = await getDocs(loansQ);
+        existingMonthlyTotal = loansSnap.docs.reduce((sum, d) => sum + (d.data().monthlyInstalment || 0), 0);
+
+        // Setup UI
+        setupProduct();
+        document.getElementById('loadingScreen').style.display = 'none';
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById('loadingScreen').style.display = 'none';
+      }
+    });
+
+    function setupProduct() {
+      // Product summary
+      document.getElementById('psIcon').textContent = product.icon || '💰';
+      document.getElementById('psName').textContent = product.name;
+      document.getElementById('psRate').textContent = product.rate + '%/month · ' + (product.interestType === 'reducing' ? 'Reducing balance' : 'Flat rate');
+
+      // Tenures
+      tenureOptions = product.tenures.split(',').map(t => parseInt(t.trim())).filter(t => !isNaN(t)).sort((a, b) => a - b);
+      selectedTenure = tenureOptions[0];
+
+      const cols = tenureOptions.length <= 3 ? tenureOptions.length : 4;
+      const grid = document.getElementById('tenureGrid');
+      grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      grid.innerHTML = tenureOptions.map(t => `
+        <button class="tenure-btn ${t === selectedTenure ? 'selected' : ''}"
+          onclick="selectTenure(${t}, this)">${t} month${t > 1 ? 's' : ''}</button>`).join('');
+
+      // Amount slider
+      const slider = document.getElementById('amountSlider');
+      slider.min = product.minAmount;
+      slider.max = product.maxAmount;
+      slider.step = Math.max(1000, Math.round((product.maxAmount - product.minAmount) / 100));
+      slider.value = Math.round((product.minAmount + product.maxAmount) / 2);
+      document.getElementById('sliderMin').textContent = '₦' + Number(product.minAmount).toLocaleString();
+      document.getElementById('sliderMax').textContent = '₦' + Number(product.maxAmount).toLocaleString();
+
+      updateCalc();
+    }
+
+    window.selectTenure = function (t, btn) {
+      selectedTenure = t;
+      document.querySelectorAll('.tenure-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      updateCalc();
+    };
+
+    window.updateCalc = function () {
+      if (!product || !selectedTenure) return;
+
+      const amount = Number(document.getElementById('amountSlider').value);
+      const tenure = selectedTenure;
+      const rate = product.rate / 100;
+      const fee = product.fee || 0;
+
+      let monthlyInstalment = 0;
+      let totalInterest = 0;
+
+      if (product.interestType === 'reducing') {
+        // Reducing balance (EMI formula)
+        if (rate === 0) {
+          monthlyInstalment = amount / tenure;
+        } else {
+          monthlyInstalment = (amount * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
+        }
+        totalInterest = (monthlyInstalment * tenure) - amount;
+      } else {
+        // Flat rate
+        totalInterest = amount * rate * tenure;
+        monthlyInstalment = (amount + totalInterest) / tenure;
+      }
+
+      const totalRepayable = amount + totalInterest + fee;
+
+      // Format display
+      document.getElementById('amountDisplay').textContent = amount.toLocaleString();
+      document.getElementById('sumAmount').textContent = '₦' + amount.toLocaleString();
+      document.getElementById('sumInterest').textContent = '₦' + Math.round(totalInterest).toLocaleString();
+      document.getElementById('sumFee').textContent = '₦' + Number(fee).toLocaleString();
+      document.getElementById('sumTotal').textContent = '₦' + Math.round(totalRepayable).toLocaleString();
+      document.getElementById('sumMonthly').textContent = '₦' + Math.round(monthlyInstalment).toLocaleString();
+      document.getElementById('sumTenure').textContent = tenure + ' month' + (tenure > 1 ? 's' : '');
+      document.getElementById('sumRateType').textContent = product.interestType === 'reducing' ? 'Reducing balance' : 'Flat rate';
+
+      // Salary capacity check
+      const verifiedSalary = memberData?.verifiedSalary || memberData?.declaredSalary || 0;
+      const maxCapacity = verifiedSalary * 0.333;
+      const totalMonthly = existingMonthlyTotal + monthlyInstalment;
+      const pct = verifiedSalary > 0 ? Math.round((totalMonthly / verifiedSalary) * 100) : 0;
+
+      const capacityPct = document.getElementById('capacityPct');
+      const capacityBar = document.getElementById('capacityBar');
+      const capacityNote = document.getElementById('capacityNote');
+      const suggestionBox = document.getElementById('suggestionBox');
+
+      capacityPct.textContent = pct + '%';
+      capacityBar.style.width = Math.min(pct, 100) + '%';
+
+      if (pct <= 33) {
+        capacityBar.className = 'capacity-bar-fill';
+        capacityNote.className = 'capacity-note';
+        capacityNote.textContent = '✅ Within your salary capacity. Your total loan commitment is ' + pct + '% of your net income.';
+        suggestionBox.style.display = 'none';
+      } else if (pct <= 50) {
+        capacityBar.className = 'capacity-bar-fill warn';
+        capacityNote.className = 'capacity-note warn';
+        capacityNote.textContent = '⚠️ Above recommended limit. Your total commitment is ' + pct + '% of net income. The limit is 33.3%.';
+        showSuggestion(amount, rate, fee, maxCapacity - existingMonthlyTotal, product.interestType);
+      } else {
+        capacityBar.className = 'capacity-bar-fill danger';
+        capacityNote.className = 'capacity-note danger';
+        capacityNote.textContent = '❌ Exceeds salary capacity. Maximum monthly commitment on your salary is ₦' + Math.round(maxCapacity).toLocaleString() + '.';
+        showSuggestion(amount, rate, fee, maxCapacity - existingMonthlyTotal, product.interestType);
+      }
+
+      // Store for submission
+      window._loanCalc = { amount, tenure, monthlyInstalment: Math.round(monthlyInstalment), totalRepayable: Math.round(totalRepayable), totalInterest: Math.round(totalInterest), fee, pct };
+    };
+
+    function showSuggestion(amount, rate, fee, maxMonthly, interestType) {
+      if (maxMonthly <= 0) {
+        document.getElementById('suggestionText').textContent = 'Your existing loan commitments already use up your full salary capacity. You cannot take on another loan at this time.';
+        document.getElementById('suggestionBox').style.display = 'block';
+        return;
+      }
+
+      // Find minimum tenure that fits within capacity
+      let suggestedTenure = null;
+      for (const t of [...tenureOptions].sort((a, b) => a - b)) {
+        let monthly = 0;
+        const r = rate;
+        if (interestType === 'reducing') {
+          monthly = r === 0 ? amount / t : (amount * r * Math.pow(1 + r, t)) / (Math.pow(1 + r, t) - 1);
+        } else {
+          monthly = (amount + amount * r * t) / t;
+        }
+        if (monthly <= maxMonthly) { suggestedTenure = t; break; }
+      }
+
+      if (suggestedTenure) {
+        document.getElementById('suggestionText').textContent = `Try a ${suggestedTenure}-month tenure — this would bring your monthly instalment within your salary capacity of ₦${Math.round(maxMonthly).toLocaleString()}/month.`;
+      } else {
+        document.getElementById('suggestionText').textContent = `The requested amount is too high for your current salary capacity even at the longest tenure. Try reducing the loan amount.`;
+      }
+      document.getElementById('suggestionBox').style.display = 'block';
+    }
+
+    window.submitLoan = async function () {
+      const calc = window._loanCalc;
+      if (!calc) return;
+
+      const errorBox = document.getElementById('errorBox');
+      errorBox.style.display = 'none';
+
+      // 33.3% check
+      if (calc.pct > 33.3) {
+        errorBox.textContent = 'Your monthly instalment exceeds 33.3% of your verified net salary. Please reduce the amount or choose a longer tenure.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      if (!selectedTenure) {
+        errorBox.textContent = 'Please select a repayment tenure.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      const btn = document.getElementById('submitBtn');
+      const spinner = document.getElementById('spinner');
+      const btnText = document.getElementById('btnText');
+
+      btn.disabled = true;
+      spinner.style.display = 'block';
+      btnText.textContent = 'Submitting...';
+
+      try {
+        await addDoc(collection(db, 'loans'), {
+          uid: currentUser.uid,
+          memberName: memberData?.fullName || '—',
+          memberId: memberData?.memberId || '—',
+          productId: product.id,
+          productName: product.name,
+          amount: calc.amount,
+          tenure: selectedTenure,
+          rate: product.rate,
+          interestType: product.interestType,
+          monthlyInstalment: calc.monthlyInstalment,
+          totalRepayable: calc.totalRepayable,
+          totalInterest: calc.totalInterest,
+          processingFee: calc.fee,
+          outstandingBalance: calc.totalRepayable,
+          verifiedSalary: memberData?.verifiedSalary || memberData?.declaredSalary || 0,
+          salaryPercent: calc.pct,
+          status: 'pending',
+          appliedAt: new Date().toISOString(),
+        });
+
+        window.location.href = 'loan-status.html';
+
+      } catch (err) {
+        console.error(err);
+        errorBox.textContent = 'Submission failed. Please check your connection and try again.';
+        errorBox.style.display = 'block';
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.textContent = 'Submit loan application';
+      }
+    };
+  </script>
+
+</body>
+</html>
