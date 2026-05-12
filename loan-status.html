@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUT Lagos — Loan Status</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0faf5; color: #0f2419; -webkit-font-smoothing: antialiased; }
+
+    .header {
+      background: linear-gradient(135deg, #1a7a4a 0%, #0f5233 100%);
+      padding: 20px 20px 28px;
+    }
+    .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .header-logo { display: flex; align-items: center; gap: 10px; }
+    .header-logo img { width: 36px; height: 36px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.9; }
+    .header-logo-text { font-size: 14px; font-weight: 800; color: white; }
+    .back-btn {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.12); border: none; border-radius: 8px;
+      padding: 8px 12px; cursor: pointer; font-family: inherit; text-decoration: none;
+    }
+    .page-title { font-size: 24px; font-weight: 800; color: white; letter-spacing: -0.025em; margin-bottom: 2px; }
+    .page-sub { font-size: 13px; color: rgba(255,255,255,0.7); }
+
+    .content { padding: 20px 16px 100px; }
+
+    /* ── SUCCESS CARD ── */
+    .success-card {
+      background: white; border-radius: 18px; padding: 24px;
+      border: 1px solid #eaf3ec; margin-bottom: 16px; text-align: center;
+      display: none;
+    }
+    .success-icon {
+      width: 64px; height: 64px; background: linear-gradient(135deg, #1a7a4a, #0f5233);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 16px;
+      animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .success-title { font-size: 20px; font-weight: 800; color: #0f2419; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .success-sub { font-size: 14px; color: #5a8a6a; line-height: 1.6; }
+
+    /* ── CARD ── */
+    .card {
+      background: white; border-radius: 18px; padding: 20px;
+      border: 1px solid #eaf3ec; margin-bottom: 16px;
+    }
+    .card-title { font-size: 15px; font-weight: 800; color: #0f2419; margin-bottom: 16px; }
+
+    /* ── LOAN SUMMARY ── */
+    .loan-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+      padding-bottom: 16px; border-bottom: 1px solid #eaf3ec;
+    }
+    .loan-icon { font-size: 32px; }
+    .loan-name { font-size: 16px; font-weight: 800; color: #0f2419; margin-bottom: 3px; }
+    .loan-date { font-size: 12px; color: #9ab8a4; }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    }
+    .badge-pending { background: #fff8e6; color: #a07020; }
+    .badge-approved { background: #e6f0ff; color: #1a4a9a; }
+    .badge-disbursed { background: #f0faf5; color: #1a7a4a; }
+    .badge-rejected { background: #fff0f0; color: #cc3300; }
+    .badge-overdue { background: #fff0f0; color: #cc3300; }
+    .badge-completed { background: #f0f0f0; color: #4a4a4a; }
+
+    /* ── STATS GRID ── */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .stat-item { background: #f7fdf9; border-radius: 12px; padding: 12px; text-align: center; }
+    .stat-num { font-size: 18px; font-weight: 800; color: #1a7a4a; letter-spacing: -0.02em; margin-bottom: 3px; }
+    .stat-num.red { color: #cc3300; }
+    .stat-label { font-size: 10px; font-weight: 600; color: #7aaa8a; }
+
+    /* ── PROGRESS ── */
+    .progress-section { margin-bottom: 4px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #4a7a5a; margin-bottom: 6px; }
+    .progress-bg { height: 8px; background: #eaf3ec; border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #1a7a4a; border-radius: 999px; transition: width 0.5s ease; }
+
+    /* ── SUMMARY ROWS ── */
+    .summary-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 11px 0; border-bottom: 1px dashed #eaf3ec;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-label { font-size: 13px; color: #6b8a75; font-weight: 600; }
+    .summary-value { font-size: 13px; font-weight: 800; color: #0f2419; }
+    .summary-value.green { color: #1a7a4a; }
+
+    /* ── TIMELINE ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .tl-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px dashed #eaf3ec; }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-dot-wrap { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .tl-dot {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .tl-dot.done { background: #f0faf5; }
+    .tl-dot.active { background: #fff8e6; }
+    .tl-dot.upcoming { background: #f5f5f5; }
+    .tl-content { flex: 1; }
+    .tl-title { font-size: 14px; font-weight: 700; color: #0f2419; margin-bottom: 2px; }
+    .tl-sub { font-size: 12px; color: #9ab8a4; line-height: 1.4; }
+    .tl-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; align-self: center; flex-shrink: 0; }
+    .tl-badge.done { background: #f0faf5; color: #1a7a4a; }
+    .tl-badge.active { background: #fff8e6; color: #a07020; }
+    .tl-badge.upcoming { background: #f5f5f5; color: #9ab8a4; }
+
+    /* ── REPAYMENT TABLE ── */
+    .repayment-table { width: 100%; border-collapse: collapse; }
+    .repayment-table th { padding: 8px 10px; text-align: left; font-size: 11px; font-weight: 700; color: #7aaa8a; text-transform: uppercase; letter-spacing: 0.05em; background: #f7fdf9; }
+    .repayment-table td { padding: 10px; font-size: 13px; color: #0f2419; border-bottom: 1px dashed #eaf3ec; }
+    .repayment-table tr:last-child td { border-bottom: none; }
+
+    /* ── EMPTY ── */
+    .empty-state { text-align: center; padding: 60px 20px; color: #9ab8a4; }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-text { font-size: 16px; font-weight: 700; color: #5a8a6a; margin-bottom: 6px; }
+    .empty-sub { font-size: 13px; }
+
+    .btn-new-loan {
+      width: 100%; padding: 14px; background: #1a7a4a; color: white;
+      border: none; border-radius: 14px; font-family: inherit;
+      font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px;
+      text-decoration: none; display: block; text-align: center;
+    }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: white; border-top: 1px solid #eaf3ec;
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      padding: 8px 0 12px; z-index: 100;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px; border: none; background: none; font-family: inherit; }
+    .nav-icon { font-size: 22px; }
+    .nav-label { font-size: 10px; font-weight: 600; color: #9ab8a4; }
+    .nav-item.active .nav-label { color: #1a7a4a; }
+    .nav-dot { width: 4px; height: 4px; border-radius: 50%; background: #1a7a4a; opacity: 0; }
+    .nav-item.active .nav-dot { opacity: 1; }
+
+    .loading-screen {
+      position: fixed; inset: 0; background: #f0faf5;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px; z-index: 999;
+    }
+    .loading-logo { width: 56px; height: 56px; background: linear-gradient(135deg, #1a7a4a, #0f5233); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 22px; }
+    .loading-spinner { width: 28px; height: 28px; border: 3px solid #d4e8dc; border-top-color: #1a7a4a; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-logo">N·</div>
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div class="header">
+    <div class="header-top">
+      <div class="header-logo">
+        <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
+        <div class="header-logo-text">NUT Lagos</div>
+      </div>
+      <a class="back-btn" href="loans.html">← Loans</a>
+    </div>
+    <div class="page-title">Loan status</div>
+    <div class="page-sub">Track your loan applications and repayments</div>
+  </div>
+
+  <div class="content" id="mainContent">
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="window.location.href='dashboard.html'">
+      <div class="nav-icon">🏠</div><div class="nav-label">Home</div><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item active">
+      <div class="nav-icon">💰</div><div class="nav-label">Loans</div><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="window.location.href='savings.html'">
+      <div class="nav-icon">🏦</div><div class="nav-label">Savings</div><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="window.location.href='insurance.html'">
+      <div class="nav-icon">🛡️</div><div class="nav-label">Insurance</div><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="window.location.href='profile.html'">
+      <div class="nav-icon">👤</div><div class="nav-label">Profile</div><div class="nav-dot"></div>
+    </button>
+  </nav>
+
+  <script type="module">
+    import { auth, db } from './js/firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'login.html'; return; }
+
+      try {
+        const q = query(
+          collection(db, 'loans'),
+          where('uid', '==', user.uid),
+          orderBy('appliedAt', 'desc')
+        );
+        const snap = await getDocs(q);
+        const loans = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        renderContent(loans);
+      } catch (err) {
+        console.error(err);
+        document.getElementById('mainContent').innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">Error loading loans</div><div class="empty-sub">Please refresh the page.</div></div>';
+      }
+
+      document.getElementById('loadingScreen').style.display = 'none';
+    });
+
+    function renderContent(loans) {
+      const content = document.getElementById('mainContent');
+
+      // Check if coming from a fresh application
+      const fromApply = sessionStorage.getItem('selectedProductId');
+      if (fromApply) {
+        sessionStorage.removeItem('selectedProductId');
+      }
+
+      if (!loans.length) {
+        content.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">💰</div>
+            <div class="empty-text">No loan applications yet</div>
+            <div class="empty-sub">Apply for your first NUT Lagos cooperative loan.</div>
+          </div>
+          <a class="btn-new-loan" href="loans.html">Browse loan products →</a>`;
+        return;
+      }
+
+      // Show success card for fresh applications
+      const latestPending = loans.find(l => l.status === 'pending');
+      let html = '';
+
+      if (fromApply && latestPending) {
+        html += `
+          <div class="success-card" style="display:block">
+            <div class="success-icon">✅</div>
+            <div class="success-title">Application submitted!</div>
+            <div class="success-sub">Your loan application has been received. Your branch officer will review it and you will be notified once a decision is made.</div>
+          </div>`;
+      }
+
+      // Render each loan
+      loans.forEach(loan => {
+        const paidAmount = (loan.totalRepayable || 0) - (loan.outstandingBalance || loan.totalRepayable || 0);
+        const paidPct = loan.totalRepayable > 0 ? Math.round((paidAmount / loan.totalRepayable) * 100) : 0;
+
+        const timeline = buildTimeline(loan);
+
+        // Repayment schedule
+        const schedule = buildSchedule(loan);
+
+        html += `
+          <div class="card">
+            <div class="loan-header">
+              <div class="loan-icon">${loan.productIcon || '💰'}</div>
+              <div style="flex:1">
+                <div class="loan-name">${loan.productName || '—'}</div>
+                <div class="loan-date">Applied ${loan.appliedAt ? new Date(loan.appliedAt).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</div>
+              </div>
+              <span class="badge badge-${loan.status || 'pending'}">${statusLabel(loan.status)}</span>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-num">₦${Number(loan.amount || 0).toLocaleString()}</div>
+                <div class="stat-label">Loan amount</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">₦${Number(loan.monthlyInstalment || 0).toLocaleString()}</div>
+                <div class="stat-label">Monthly instalment</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">₦${Number(loan.outstandingBalance || loan.totalRepayable || 0).toLocaleString()}</div>
+                <div class="stat-label">Outstanding</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">${loan.tenure} mo</div>
+                <div class="stat-label">Tenure</div>
+              </div>
+            </div>
+
+            ${loan.status === 'disbursed' || loan.status === 'completed' ? `
+              <div class="progress-section" style="margin-bottom:16px">
+                <div class="progress-label">
+                  <span>Repayment progress</span>
+                  <span>${paidPct}% paid</span>
+                </div>
+                <div class="progress-bg">
+                  <div class="progress-fill" style="width:${paidPct}%"></div>
+                </div>
+              </div>` : ''}
+
+            <div class="card-title" style="margin-top:4px">Application status</div>
+            <div class="timeline">${timeline}</div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Loan details</div>
+            <div class="summary-row"><div class="summary-label">Interest rate</div><div class="summary-value">${loan.rate}%/month · ${loan.interestType === 'reducing' ? 'Reducing balance' : 'Flat rate'}</div></div>
+            <div class="summary-row"><div class="summary-label">Total interest</div><div class="summary-value">₦${Number(loan.totalInterest || 0).toLocaleString()}</div></div>
+            <div class="summary-row"><div class="summary-label">Processing fee</div><div class="summary-value">₦${Number(loan.processingFee || 0).toLocaleString()}</div></div>
+            <div class="summary-row"><div class="summary-label">Total repayable</div><div class="summary-value green">₦${Number(loan.totalRepayable || 0).toLocaleString()}</div></div>
+            ${loan.disbursedAt ? `<div class="summary-row"><div class="summary-label">Disbursed on</div><div class="summary-value">${new Date(loan.disbursedAt).toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' })}</div></div>` : ''}
+            ${loan.lastRepaymentAt ? `<div class="summary-row"><div class="summary-label">Last repayment</div><div class="summary-value">₦${Number(loan.lastRepaymentAmount || 0).toLocaleString()} on ${new Date(loan.lastRepaymentAt).toLocaleDateString('en-NG')}</div></div>` : ''}
+          </div>
+
+          ${schedule ? `
+            <div class="card">
+              <div class="card-title">Repayment schedule</div>
+              <div style="overflow-x:auto">
+                <table class="repayment-table">
+                  <thead><tr><th>Month</th><th>Due date</th><th>Amount</th><th>Status</th></tr></thead>
+                  <tbody>${schedule}</tbody>
+                </table>
+              </div>
+            </div>` : ''}`;
+      });
+
+      html += `<a class="btn-new-loan" href="loans.html" style="background:#f0faf5;color:#1a7a4a;border:1px solid #c8e6d4;margin-top:8px">Apply for another loan →</a>`;
+
+      content.innerHTML = html;
+    }
+
+    function statusLabel(status) {
+      const labels = {
+        pending: '⏳ Pending review',
+        approved: '✅ Approved',
+        disbursed: '💸 Disbursed',
+        rejected: '❌ Rejected',
+        overdue: '⚠️ Overdue',
+        completed: '🎉 Completed',
+      };
+      return labels[status] || status;
+    }
+
+    function buildTimeline(loan) {
+      const steps = [
+        {
+          icon: '📝',
+          title: 'Application submitted',
+          sub: loan.appliedAt ? new Date(loan.appliedAt).toLocaleDateString('en-NG') : '—',
+          state: 'done',
+          badge: 'Done',
+        },
+        {
+          icon: '👀',
+          title: 'Under review',
+          sub: 'Branch officer reviewing your application',
+          state: loan.status === 'pending' ? 'active' : 'done',
+          badge: loan.status === 'pending' ? 'In progress' : 'Done',
+        },
+        {
+          icon: loan.status === 'rejected' ? '❌' : '✅',
+          title: loan.status === 'rejected' ? 'Application rejected' : 'Application approved',
+          sub: loan.approvedAt ? new Date(loan.approvedAt).toLocaleDateString('en-NG') : loan.status === 'rejected' ? (loan.reviewedAt ? new Date(loan.reviewedAt).toLocaleDateString('en-NG') : '—') : 'Awaiting decision',
+          state: ['approved', 'disbursed', 'overdue', 'completed'].includes(loan.status) ? 'done' : loan.status === 'rejected' ? 'done' : 'upcoming',
+          badge: ['approved', 'disbursed', 'overdue', 'completed'].includes(loan.status) ? 'Done' : loan.status === 'rejected' ? 'Rejected' : 'Upcoming',
+        },
+        {
+          icon: '💸',
+          title: 'Funds disbursed',
+          sub: loan.disbursedAt ? new Date(loan.disbursedAt).toLocaleDateString('en-NG') : 'After approval — funds sent to your account',
+          state: ['disbursed', 'overdue', 'completed'].includes(loan.status) ? 'done' : 'upcoming',
+          badge: ['disbursed', 'overdue', 'completed'].includes(loan.status) ? 'Done' : 'Upcoming',
+        },
+        {
+          icon: '🎉',
+          title: 'Loan completed',
+          sub: loan.status === 'completed' ? 'Fully repaid' : 'After all repayments are made',
+          state: loan.status === 'completed' ? 'done' : 'upcoming',
+          badge: loan.status === 'completed' ? 'Done' : 'Upcoming',
+        },
+      ];
+
+      return steps.map(s => `
+        <div class="tl-item">
+          <div class="tl-dot ${s.state}">${s.icon}</div>
+          <div class="tl-content">
+            <div class="tl-title">${s.title}</div>
+            <div class="tl-sub">${s.sub}</div>
+          </div>
+          <div class="tl-badge ${s.state}">${s.badge}</div>
+        </div>`).join('');
+    }
+
+    function buildSchedule(loan) {
+      if (!['disbursed', 'overdue', 'completed'].includes(loan.status)) return null;
+      if (!loan.disbursedAt || !loan.tenure) return null;
+
+      const rows = [];
+      const startDate = new Date(loan.disbursedAt);
+      const paidCount = loan.lastRepaymentAt
+        ? Math.floor((new Date(loan.lastRepaymentAt) - startDate) / (30 * 24 * 60 * 60 * 1000)) + 1
+        : 0;
+
+      for (let i = 1; i <= loan.tenure; i++) {
+        const dueDate = new Date(startDate);
+        dueDate.setMonth(dueDate.getMonth() + i);
+        const isPaid = i <= paidCount;
+        const isOverdue = !isPaid && dueDate < new Date();
+        rows.push(`
+          <tr>
+            <td>Month ${i}</td>
+            <td>${dueDate.toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+            <td>₦${Number(loan.monthlyInstalment || 0).toLocaleString()}</td>
+            <td>
+              <span class="badge ${isPaid ? 'badge-approved' : isOverdue ? 'badge-overdue' : 'badge-pending'}">
+                ${isPaid ? '✅ Paid' : isOverdue ? '⚠️ Overdue' : '⏳ Upcoming'}
+              </span>
+            </td>
+          </tr>`);
+      }
+      return rows.join('');
+    }
+  </script>
+
+</body>
+</html>
