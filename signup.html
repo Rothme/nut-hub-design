@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUT Financial Hub — Create Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f0faf5;
+      min-height: 100vh;
+      padding: 40px 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #4a7a5a;
+      cursor: pointer;
+      margin-bottom: 24px;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 0;
+      text-decoration: none;
+    }
+
+    .back-btn:hover { color: #1a7a4a; }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 40px 36px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 24px 48px rgba(0,0,0,0.06);
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #1a7a4a, #0f5233);
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f2419;
+    }
+
+    .logo-text span { font-weight: 500; color: #5a8a6a; }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f2419;
+      letter-spacing: -0.025em;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b8a75;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    /* Progress steps */
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 36px;
+    }
+
+    .prog-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .prog-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #d4e8dc;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #9ab8a4;
+      transition: all 0.3s;
+    }
+
+    .prog-circle.active {
+      border-color: #1a7a4a;
+      background: #1a7a4a;
+      color: white;
+    }
+
+    .prog-circle.done {
+      border-color: #1a7a4a;
+      background: #1a7a4a;
+      color: white;
+    }
+
+    .prog-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #9ab8a4;
+      text-align: center;
+    }
+
+    .prog-label.active { color: #1a7a4a; }
+
+    .prog-line {
+      flex: 1;
+      height: 2px;
+      background: #d4e8dc;
+      margin-bottom: 20px;
+      transition: background 0.3s;
+    }
+
+    .prog-line.done { background: #1a7a4a; }
+
+    /* Form sections */
+    .form-section {
+      display: none;
+    }
+
+    .form-section.active { display: block; }
+
+    .section-heading {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f2419;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eaf3ec;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #4a7a5a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 7px;
+    }
+
+    .label .required { color: #cc0000; margin-left: 2px; }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1.5px solid #d4e8dc;
+      border-radius: 11px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #0f2419;
+      background: white;
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #1a7a4a;
+    }
+
+    input::placeholder { color: #b0caba; }
+
+    textarea {
+      resize: none;
+      height: 90px;
+    }
+
+    .phone-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .country-code {
+      width: 86px;
+      padding: 13px 10px;
+      border: 1.5px solid #d4e8dc;
+      border-radius: 11px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f2419;
+      background: #f7fdf9;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .info-box {
+      background: #f0faf5;
+      border: 1px solid #c8e6d4;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #3a6a4a;
+      line-height: 1.55;
+      display: flex;
+      gap: 10px;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      accent-color: #1a7a4a;
+    }
+
+    .checkbox-label {
+      font-size: 13px;
+      color: #4a7a5a;
+      line-height: 1.5;
+    }
+
+    .checkbox-label a {
+      color: #1a7a4a;
+      font-weight: 600;
+    }
+
+    .error {
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      color: #cc0000;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 13px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+    }
+
+    .btn-primary {
+      background: #1a7a4a;
+      color: white;
+    }
+
+    .btn-primary:hover { background: #155f3a; }
+    .btn-primary:disabled { background: #a0c4b0; cursor: not-allowed; }
+
+    .btn-back {
+      background: #f0faf5;
+      color: #4a7a5a;
+      flex: 0 0 auto;
+      padding: 14px 20px;
+    }
+
+    .btn-back:hover { background: #d4e8dc; }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .sign-in-link {
+      text-align: center;
+      font-size: 13px;
+      color: #7aaa8a;
+      margin-top: 20px;
+    }
+
+    .sign-in-link a {
+      color: #1a7a4a;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 28px 20px; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <a class="back-btn" href="index.html">← Back to home</a>
+
+    <div class="card">
+      <div class="logo-row">
+        <div class="logo-icon">N·</div>
+        <div class="logo-text">NUT <span>Financial Hub</span></div>
+      </div>
+
+      <h1>Create your account</h1>
+      <p class="subtitle">Fill in your details below. Your branch officer will review and approve your application within 24 hours.</p>
+
+      <!-- Progress indicator -->
+      <div class="progress">
+        <div class="prog-step">
+          <div class="prog-circle active" id="pc1">1</div>
+          <div class="prog-label active" id="pl1">Personal</div>
+        </div>
+        <div class="prog-line" id="line1"></div>
+        <div class="prog-step">
+          <div class="prog-circle" id="pc2">2</div>
+          <div class="prog-label" id="pl2">Employment</div>
+        </div>
+        <div class="prog-line" id="line2"></div>
+        <div class="prog-step">
+          <div class="prog-circle" id="pc3">3</div>
+          <div class="prog-label" id="pl3">Security</div>
+        </div>
+      </div>
+
+      <div class="error" id="errorBox"></div>
+
+      <!-- STEP 1: Personal details -->
+      <div class="form-section active" id="step1">
+        <div class="section-heading">Personal information</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label">First name <span class="required">*</span></label>
+            <input type="text" id="firstName" placeholder="e.g. Adaeze" />
+          </div>
+          <div class="field">
+            <label class="label">Last name <span class="required">*</span></label>
+            <input type="text" id="lastName" placeholder="e.g. Okonkwo" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Phone number <span class="required">*</span></label>
+          <div class="phone-row">
+            <div class="country-code">🇳🇬 +234</div>
+            <input type="tel" id="phone" placeholder="080 0000 0000" maxlength="11" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Email address</label>
+          <input type="email" id="email" placeholder="e.g. adaeze@gmail.com" />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label">Date of birth <span class="required">*</span></label>
+            <input type="date" id="dob" />
+          </div>
+          <div class="field">
+            <label class="label">Gender <span class="required">*</span></label>
+            <select id="gender">
+              <option value="">Select gender</option>
+              <option>Female</option>
+              <option>Male</option>
+              <option>Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Residential address <span class="required">*</span></label>
+          <textarea id="address" placeholder="House number, street, area, LGA, state"></textarea>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="goToStep2()">
+            Continue → Employment details
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Employment details -->
+      <div class="form-section" id="step2">
+        <div class="section-heading">NUT membership & employment</div>
+
+        <div class="info-box">
+          ℹ️ Your NUT membership number is on your membership card. Contact your branch secretary if you do not have it.
+        </div>
+
+        <div class="field">
+          <label class="label">NUT membership number <span class="required">*</span></label>
+          <input type="text" id="nutNumber" placeholder="e.g. NUT-LG-018-44829" />
+        </div>
+
+        <div class="field">
+          <label class="label">School / institution name <span class="required">*</span></label>
+          <input type="text" id="schoolName" placeholder="e.g. Government Secondary School, Surulere" />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label">State <span class="required">*</span></label>
+            <select id="state">
+              <option value="">Select state</option>
+              <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
+              <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
+              <option>Benue</option><option>Borno</option><option>Cross River</option>
+              <option>Delta</option><option>Ebonyi</option><option>Edo</option>
+              <option>Ekiti</option><option>Enugu</option><option>FCT</option>
+              <option>Gombe</option><option>Imo</option><option>Jigawa</option>
+              <option>Kaduna</option><option>Kano</option><option>Katsina</option>
+              <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+              <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
+              <option>Ogun</option><option>Ondo</option><option>Osun</option>
+              <option>Oyo</option><option>Plateau</option><option>Rivers</option>
+              <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+              <option>Zamfara</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label">LGA <span class="required">*</span></label>
+            <input type="text" id="lga" placeholder="e.g. Surulere" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label">Job title <span class="required">*</span></label>
+            <select id="jobTitle">
+              <option value="">Select title</option>
+              <option>Classroom Teacher</option>
+              <option>Senior Teacher</option>
+              <option>Head of Department</option>
+              <option>Vice Principal</option>
+              <option>Principal</option>
+              <option>Education Officer</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label">Years of service <span class="required">*</span></label>
+            <select id="yearsService">
+              <option value="">Select range</option>
+              <option>Less than 1 year</option>
+              <option>1 — 5 years</option>
+              <option>6 — 10 years</option>
+              <option>11 — 20 years</option>
+              <option>Over 20 years</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Monthly net salary (₦) <span class="required">*</span></label>
+          <input type="number" id="salary" placeholder="e.g. 85000" />
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="goToStep1()">← Back</button>
+          <button class="btn btn-primary" onclick="goToStep3()">
+            Continue → Security
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Security + submit -->
+      <div class="form-section" id="step3">
+        <div class="section-heading">Set up your PIN & agree to terms</div>
+
+        <div class="info-box">
+          🔐 Your 6-digit PIN is used to confirm transactions inside the app. Keep it private and do not share it with anyone.
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label">Create PIN <span class="required">*</span></label>
+            <input type="password" id="pin" placeholder="6 digits" maxlength="6" inputmode="numeric" />
+          </div>
+          <div class="field">
+            <label class="label">Confirm PIN <span class="required">*</span></label>
+            <input type="password" id="pinConfirm" placeholder="6 digits" maxlength="6" inputmode="numeric" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Next of kin — full name <span class="required">*</span></label>
+          <input type="text" id="nokName" placeholder="e.g. Chukwuemeka Okonkwo" />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label">Next of kin — relationship <span class="required">*</span></label>
+            <select id="nokRelation">
+              <option value="">Select</option>
+              <option>Spouse</option>
+              <option>Parent</option>
+              <option>Sibling</option>
+              <option>Child</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label">Next of kin — phone <span class="required">*</span></label>
+            <input type="tel" id="nokPhone" placeholder="080 0000 0000" maxlength="11" />
+          </div>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="termsCheck" />
+          <label class="checkbox-label" for="termsCheck">
+            I agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>. I confirm that all information provided is accurate and belongs to me.
+          </label>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="debitCheck" />
+          <label class="checkbox-label" for="debitCheck">
+            I authorise NUT Financial Hub to deduct loan repayments and savings contributions from my salary account as agreed.
+          </label>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="goToStep2()">← Back</button>
+          <button class="btn btn-primary" id="submitBtn" onclick="submitApplication()">
+            <span id="btnText">Submit application</span>
+            <div class="spinner" id="spinner"></div>
+          </button>
+        </div>
+      </div>
+
+      <div class="sign-in-link">
+        Already a member? <a href="login.html">Sign in here</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { db } from './js/firebase.js';
+    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // ── Step navigation ──
+    window.goToStep1 = function () { showStep(1); };
+    window.goToStep2 = function () {
+      if (!validateStep1()) return;
+      showStep(2);
+    };
+    window.goToStep3 = function () {
+      if (!validateStep2()) return;
+      showStep(3);
+    };
+
+    function showStep(n) {
+      document.getElementById('errorBox').style.display = 'none';
+      [1,2,3].forEach(i => {
+        document.getElementById('step' + i).classList.toggle('active', i === n);
+        const circle = document.getElementById('pc' + i);
+        const label = document.getElementById('pl' + i);
+        if (i < n) {
+          circle.classList.add('done');
+          circle.classList.remove('active');
+          circle.textContent = '✓';
+        } else if (i === n) {
+          circle.classList.add('active');
+          circle.classList.remove('done');
+          circle.textContent = i;
+        } else {
+          circle.classList.remove('active', 'done');
+          circle.textContent = i;
+        }
+        label.classList.toggle('active', i === n);
+      });
+      document.getElementById('line1').classList.toggle('done', n > 1);
+      document.getElementById('line2').classList.toggle('done', n > 2);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── Validation ──
+    function showError(msg) {
+      const box = document.getElementById('errorBox');
+      box.textContent = msg;
+      box.style.display = 'block';
+    }
+
+    function validateStep1() {
+      if (!document.getElementById('firstName').value.trim()) { showError('Please enter your first name.'); return false; }
+      if (!document.getElementById('lastName').value.trim()) { showError('Please enter your last name.'); return false; }
+      const phone = document.getElementById('phone').value.trim();
+      if (!phone || phone.length < 10) { showError('Please enter a valid phone number.'); return false; }
+      if (!document.getElementById('dob').value) { showError('Please enter your date of birth.'); return false; }
+      if (!document.getElementById('gender').value) { showError('Please select your gender.'); return false; }
+      if (!document.getElementById('address').value.trim()) { showError('Please enter your residential address.'); return false; }
+      return true;
+    }
+
+    function validateStep2() {
+      if (!document.getElementById('nutNumber').value.trim()) { showError('Please enter your NUT membership number.'); return false; }
+      if (!document.getElementById('schoolName').value.trim()) { showError('Please enter your school name.'); return false; }
+      if (!document.getElementById('state').value) { showError('Please select your state.'); return false; }
+      if (!document.getElementById('lga').value.trim()) { showError('Please enter your LGA.'); return false; }
+      if (!document.getElementById('jobTitle').value) { showError('Please select your job title.'); return false; }
+      if (!document.getElementById('yearsService').value) { showError('Please select your years of service.'); return false; }
+      if (!document.getElementById('salary').value) { showError('Please enter your monthly salary.'); return false; }
+      return true;
+    }
+
+    function validateStep3() {
+      const pin = document.getElementById('pin').value;
+      const pinConfirm = document.getElementById('pinConfirm').value;
+      if (!pin || pin.length !== 6) { showError('Your PIN must be exactly 6 digits.'); return false; }
+      if (pin !== pinConfirm) { showError('Your PINs do not match. Please check and try again.'); return false; }
+      if (!document.getElementById('nokName').value.trim()) { showError('Please enter your next of kin name.'); return false; }
+      if (!document.getElementById('nokRelation').value) { showError('Please select your next of kin relationship.'); return false; }
+      if (!document.getElementById('nokPhone').value.trim()) { showError('Please enter your next of kin phone number.'); return false; }
+      if (!document.getElementById('termsCheck').checked) { showError('Please agree to the Terms of Use and Privacy Policy to continue.'); return false; }
+      if (!document.getElementById('debitCheck').checked) { showError('Please authorise salary deductions to continue.'); return false; }
+      return true;
+    }
+
+    // ── Submit ──
+    window.submitApplication = async function () {
+      if (!validateStep3()) return;
+
+      const btn = document.getElementById('submitBtn');
+      const spinner = document.getElementById('spinner');
+      const btnText = document.getElementById('btnText');
+
+      btn.disabled = true;
+      spinner.style.display = 'block';
+      btnText.textContent = 'Submitting...';
+
+      // Format phone
+      let phone = document.getElementById('phone').value.trim().replace(/\s/g, '');
+      if (phone.startsWith('0')) phone = '+234' + phone.slice(1);
+
+      try {
+        await addDoc(collection(db, 'applications'), {
+          firstName: document.getElementById('firstName').value.trim(),
+          lastName: document.getElementById('lastName').value.trim(),
+          fullName: document.getElementById('firstName').value.trim() + ' ' + document.getElementById('lastName').value.trim(),
+          phone: phone,
+          email: document.getElementById('email').value.trim(),
+          dob: document.getElementById('dob').value,
+          gender: document.getElementById('gender').value,
+          address: document.getElementById('address').value.trim(),
+          nutNumber: document.getElementById('nutNumber').value.trim(),
+          schoolName: document.getElementById('schoolName').value.trim(),
+          state: document.getElementById('state').value,
+          lga: document.getElementById('lga').value.trim(),
+          jobTitle: document.getElementById('jobTitle').value,
+          yearsService: document.getElementById('yearsService').value,
+          salary: document.getElementById('salary').value,
+          nokName: document.getElementById('nokName').value.trim(),
+          nokRelation: document.getElementById('nokRelation').value,
+          nokPhone: document.getElementById('nokPhone').value.trim(),
+          status: 'pending',
+          submittedAt: new Date().toISOString(),
+        });
+
+        // Go to pending page
+        window.location.href = 'pending.html';
+
+      } catch (err) {
+        console.error(err);
+        showError('Submission failed. Please check your connection and try again.');
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.textContent = 'Submit application';
+      }
+    };
+  </script>
+
+</body>
+</html>
