@@ -3,518 +3,317 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NUT Financial Hub — Admin Portal</title>
+  <title>NUT Lagos — Admin Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #f0faf5;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0faf5; -webkit-font-smoothing: antialiased; }
 
     /* ── AUTH GATE ── */
     .auth-gate {
-      position: fixed;
-      inset: 0;
-      background: #f0faf5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      z-index: 999;
+      position: fixed; inset: 0; background: #f0faf5;
+      display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 999;
     }
-
     .auth-card {
-      background: white;
-      border-radius: 24px;
-      padding: 40px 36px;
-      width: 100%;
-      max-width: 400px;
+      background: white; border-radius: 24px; padding: 40px 36px;
+      width: 100%; max-width: 400px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 24px 48px rgba(0,0,0,0.06);
     }
-
-    .auth-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #1a7a4a, #0f5233);
-      border-radius: 11px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 800;
-      font-size: 16px;
-    }
-
-    .logo-text {
-      font-size: 15px;
-      font-weight: 800;
-      color: #0f2419;
-    }
-
-    .logo-text span { font-weight: 500; color: #5a8a6a; }
-
+    .auth-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .auth-logo img { width: 40px; height: 40px; object-fit: contain; }
+    .auth-logo-name { font-size: 15px; font-weight: 800; color: #0f2419; }
+    .auth-logo-sub { font-size: 10px; font-weight: 700; color: #1a7a4a; text-transform: uppercase; letter-spacing: 0.08em; }
     .auth-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      background: #fff8e6;
-      border: 1px solid #f5d98a;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #a07020;
-      margin-bottom: 20px;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; background: #fff8e6; border: 1px solid #f5d98a;
+      border-radius: 999px; font-size: 12px; font-weight: 700; color: #a07020; margin-bottom: 20px;
     }
-
-    .auth-card h2 {
-      font-size: 22px;
-      font-weight: 800;
-      color: #0f2419;
-      margin-bottom: 6px;
-      letter-spacing: -0.02em;
-    }
-
-    .auth-sub {
-      font-size: 13px;
-      color: #6b8a75;
-      margin-bottom: 28px;
-    }
-
-    .label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      color: #4a7a5a;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 7px;
-    }
-
-    .field { margin-bottom: 16px; }
-
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 13px 14px;
-      border: 1.5px solid #d4e8dc;
-      border-radius: 11px;
-      font-family: inherit;
-      font-size: 14px;
-      color: #0f2419;
-      background: white;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
-    input:focus { border-color: #1a7a4a; }
-
-    .error {
-      background: #fff0f0;
-      border: 1px solid #ffcccc;
-      color: #cc0000;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      margin-bottom: 14px;
-      display: none;
-    }
-
-    .btn-login {
-      width: 100%;
-      padding: 14px;
-      background: #1a7a4a;
-      color: white;
-      border: none;
-      border-radius: 13px;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .btn-login:hover { background: #155f3a; }
+    .auth-card h2 { font-size: 22px; font-weight: 800; color: #0f2419; margin-bottom: 6px; letter-spacing: -0.02em; }
+    .auth-sub { font-size: 13px; color: #6b8a75; margin-bottom: 28px; }
 
     /* ── MAIN LAYOUT ── */
-    .main { display: none; }
+    .main { display: none; min-height: 100vh; }
 
-    /* Topbar */
     .topbar {
-      background: white;
-      border-bottom: 1px solid #eaf3ec;
-      padding: 0 32px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background: white; border-bottom: 1px solid #eaf3ec;
+      padding: 0 32px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
     }
-
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .topbar-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: #0f2419;
-      letter-spacing: -0.02em;
-    }
-
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-logo { display: flex; align-items: center; gap: 10px; }
+    .topbar-logo img { width: 36px; height: 36px; object-fit: contain; }
+    .topbar-title { font-size: 15px; font-weight: 800; color: #0f2419; letter-spacing: -0.02em; }
     .admin-badge {
-      padding: 4px 10px;
-      background: #fff8e6;
-      border: 1px solid #f5d98a;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #a07020;
+      padding: 4px 10px; background: #fff8e6; border: 1px solid #f5d98a;
+      border-radius: 999px; font-size: 11px; font-weight: 700; color: #a07020;
     }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .admin-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: #4a7a5a;
-    }
-
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .admin-name { font-size: 13px; font-weight: 600; color: #4a7a5a; }
     .btn-signout {
-      padding: 8px 16px;
-      background: #f0faf5;
-      color: #4a7a5a;
-      border: none;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
+      padding: 8px 16px; background: #f0faf5; color: #4a7a5a;
+      border: none; border-radius: 8px; font-family: inherit;
+      font-size: 13px; font-weight: 600; cursor: pointer;
     }
-
     .btn-signout:hover { background: #d4e8dc; }
 
-    /* Content */
-    .content {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 32px;
+    /* ── TAB NAV ── */
+    .tab-nav {
+      background: white; border-bottom: 1px solid #eaf3ec;
+      padding: 0 32px; display: flex; gap: 0;
     }
-
-    /* Stats row */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 32px;
+    .tab-nav-item {
+      padding: 16px 20px; font-size: 14px; font-weight: 600;
+      color: #7aaa8a; cursor: pointer; border: none; background: none;
+      font-family: inherit; border-bottom: 2px solid transparent;
+      transition: all 0.15s;
     }
+    .tab-nav-item.active { color: #1a7a4a; border-bottom-color: #1a7a4a; }
+    .tab-nav-item:hover { color: #1a7a4a; }
 
-    .stat-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid #eaf3ec;
-    }
+    .content { max-width: 1200px; margin: 0 auto; padding: 28px 32px 60px; }
 
-    .stat-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #7aaa8a;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 8px;
-    }
+    /* ── TAB PANELS ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
 
-    .stat-value {
-      font-size: 32px;
-      font-weight: 800;
-      color: #0f2419;
-      letter-spacing: -0.03em;
-    }
-
+    /* ── STATS ── */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: white; border-radius: 16px; padding: 20px; border: 1px solid #eaf3ec; }
+    .stat-label { font-size: 12px; font-weight: 700; color: #7aaa8a; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 800; color: #0f2419; letter-spacing: -0.03em; }
     .stat-value.green { color: #1a7a4a; }
     .stat-value.amber { color: #d4820a; }
     .stat-value.red { color: #cc3300; }
 
-    /* Tabs */
-    .tabs {
-      display: flex;
-      gap: 4px;
-      background: white;
-      border: 1px solid #eaf3ec;
-      border-radius: 12px;
-      padding: 4px;
-      margin-bottom: 20px;
-      width: fit-content;
+    /* ── FILTER TABS ── */
+    .filter-tabs {
+      display: flex; gap: 4px; background: white;
+      border: 1px solid #eaf3ec; border-radius: 12px;
+      padding: 4px; margin-bottom: 20px; width: fit-content;
     }
-
-    .tab {
-      padding: 8px 18px;
-      border-radius: 9px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #7aaa8a;
-      cursor: pointer;
-      border: none;
-      background: none;
-      font-family: inherit;
-      transition: all 0.15s;
+    .filter-tab {
+      padding: 8px 18px; border-radius: 9px; font-size: 13px;
+      font-weight: 600; color: #7aaa8a; cursor: pointer;
+      border: none; background: none; font-family: inherit; transition: all 0.15s;
     }
+    .filter-tab.active { background: #1a7a4a; color: white; }
 
-    .tab.active {
-      background: #1a7a4a;
-      color: white;
-    }
-
-    /* Applications table */
-    .table-card {
-      background: white;
-      border-radius: 16px;
-      border: 1px solid #eaf3ec;
-      overflow: hidden;
-    }
-
+    /* ── TABLE ── */
+    .table-card { background: white; border-radius: 16px; border: 1px solid #eaf3ec; overflow: hidden; }
     .table-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid #eaf3ec;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 16px 20px; border-bottom: 1px solid #eaf3ec;
+      display: flex; align-items: center; justify-content: space-between;
     }
-
-    .table-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #0f2419;
-    }
-
-    .table-count {
-      font-size: 13px;
-      color: #7aaa8a;
-      font-weight: 600;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead tr {
-      background: #f7fdf9;
-      border-bottom: 1px solid #eaf3ec;
-    }
-
-    th {
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 700;
-      color: #7aaa8a;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    td {
-      padding: 14px 16px;
-      font-size: 13px;
-      color: #0f2419;
-      border-bottom: 1px dashed #eaf3ec;
-    }
-
+    .table-title { font-size: 15px; font-weight: 700; color: #0f2419; }
+    .table-count { font-size: 13px; color: #7aaa8a; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: #f7fdf9; border-bottom: 1px solid #eaf3ec; }
+    th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; color: #7aaa8a; text-transform: uppercase; letter-spacing: 0.06em; }
+    td { padding: 14px 16px; font-size: 13px; color: #0f2419; border-bottom: 1px dashed #eaf3ec; }
     tr:last-child td { border-bottom: none; }
-
     tr:hover td { background: #fafffe; }
-
     .td-name { font-weight: 700; }
+    .td-sub { font-size: 11px; color: #9ab8a4; margin-top: 2px; }
 
-    .td-sub {
-      font-size: 11px;
-      color: #9ab8a4;
-      margin-top: 2px;
-    }
-
+    /* ── BADGES ── */
     .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;
     }
-
     .badge-pending { background: #fff8e6; color: #a07020; }
     .badge-approved { background: #f0faf5; color: #1a7a4a; }
     .badge-rejected { background: #fff0f0; color: #cc3300; }
+    .badge-active { background: #f0faf5; color: #1a7a4a; }
+    .badge-disbursed { background: #e6f0ff; color: #1a4a9a; }
+    .badge-overdue { background: #fff0f0; color: #cc3300; }
+    .badge-completed { background: #f0f0f0; color: #4a4a4a; }
 
-    .action-btns {
-      display: flex;
-      gap: 6px;
-    }
-
+    /* ── ACTION BUTTONS ── */
+    .action-btns { display: flex; gap: 6px; flex-wrap: wrap; }
     .btn-approve {
-      padding: 7px 14px;
-      background: #1a7a4a;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
+      padding: 7px 14px; background: #1a7a4a; color: white;
+      border: none; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; cursor: pointer;
     }
-
     .btn-approve:hover { background: #155f3a; }
-
     .btn-reject {
-      padding: 7px 14px;
-      background: #fff0f0;
-      color: #cc3300;
-      border: 1px solid #ffcccc;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
+      padding: 7px 14px; background: #fff0f0; color: #cc3300;
+      border: 1px solid #ffcccc; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; cursor: pointer;
     }
-
     .btn-reject:hover { background: #ffe0e0; }
-
     .btn-view {
-      padding: 7px 14px;
-      background: #f0faf5;
-      color: #4a7a5a;
-      border: none;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
+      padding: 7px 14px; background: #f0faf5; color: #4a7a5a;
+      border: none; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; cursor: pointer;
     }
-
     .btn-view:hover { background: #d4e8dc; }
-
-    .empty-state {
-      padding: 60px 20px;
-      text-align: center;
-      color: #9ab8a4;
+    .btn-disburse {
+      padding: 7px 14px; background: #e6f0ff; color: #1a4a9a;
+      border: none; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .btn-paid {
+      padding: 7px 14px; background: #f0faf5; color: #1a7a4a;
+      border: 1px solid #c8e6d4; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; cursor: pointer;
     }
 
+    /* ── EMPTY STATE ── */
+    .empty-state { padding: 60px 20px; text-align: center; color: #9ab8a4; }
     .empty-icon { font-size: 40px; margin-bottom: 12px; }
     .empty-text { font-size: 15px; font-weight: 600; }
 
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      z-index: 200;
-      display: none;
+    /* ── MODAL ── */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px; z-index: 200; display: none;
     }
-
     .modal {
-      background: white;
-      border-radius: 20px;
-      padding: 32px;
-      width: 100%;
-      max-width: 560px;
-      max-height: 80vh;
-      overflow-y: auto;
+      background: white; border-radius: 20px; padding: 32px;
+      width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto;
     }
-
     .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;
     }
-
-    .modal-title {
-      font-size: 18px;
-      font-weight: 800;
-      color: #0f2419;
-    }
-
+    .modal-title { font-size: 18px; font-weight: 800; color: #0f2419; }
     .modal-close {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: #f0faf5;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 32px; height: 32px; border-radius: 8px; background: #f0faf5;
+      border: none; cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+    .detail-label { font-size: 11px; font-weight: 700; color: #7aaa8a; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .detail-value { font-size: 14px; font-weight: 600; color: #0f2419; }
+    .modal-actions { display: flex; gap: 10px; padding-top: 20px; border-top: 1px solid #eaf3ec; margin-top: 4px; }
+
+    /* ── SALARY VERIFY ── */
+    .salary-verify-box {
+      background: #fff8e6; border: 1px solid #f5d98a;
+      border-radius: 14px; padding: 16px; margin-bottom: 20px;
+    }
+    .salary-verify-title { font-size: 13px; font-weight: 700; color: #a07020; margin-bottom: 12px; }
+    .salary-row { display: flex; gap: 10px; align-items: center; }
+    .salary-input {
+      flex: 1; padding: 11px 14px; border: 1.5px solid #f5d98a;
+      border-radius: 10px; font-family: inherit; font-size: 14px;
+      font-weight: 700; color: #0f2419; background: white; outline: none;
+    }
+    .salary-input:focus { border-color: #1a7a4a; }
+    .salary-confirm-btn {
+      padding: 11px 18px; background: #1a7a4a; color: white;
+      border: none; border-radius: 10px; font-family: inherit;
+      font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;
     }
 
-    .detail-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 24px;
+    /* ── LOAN PRODUCTS ── */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+    }
+    .section-heading { font-size: 17px; font-weight: 800; color: #0f2419; }
+    .btn-new {
+      padding: 10px 18px; background: #1a7a4a; color: white;
+      border: none; border-radius: 10px; font-family: inherit;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-new:hover { background: #155f3a; }
+
+    .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+    .product-card {
+      background: white; border: 1px solid #eaf3ec; border-radius: 16px; padding: 20px;
+      position: relative;
+    }
+    .product-card.inactive { opacity: 0.6; }
+    .product-status-badge {
+      position: absolute; top: 14px; right: 14px;
+      padding: 3px 10px; border-radius: 999px; font-size: 10px; font-weight: 700;
+    }
+    .product-status-badge.active { background: #f0faf5; color: #1a7a4a; }
+    .product-status-badge.inactive { background: #f0f0f0; color: #7a7a7a; }
+    .product-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .product-name { font-size: 16px; font-weight: 800; color: #0f2419; margin-bottom: 6px; }
+    .product-rate { font-size: 13px; color: #1a7a4a; font-weight: 700; margin-bottom: 4px; }
+    .product-detail { font-size: 12px; color: #7aaa8a; margin-bottom: 2px; }
+    .product-actions { display: flex; gap: 6px; margin-top: 14px; }
+    .btn-edit {
+      flex: 1; padding: 8px; background: #f0faf5; color: #1a7a4a;
+      border: none; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; cursor: pointer; text-align: center;
+    }
+    .btn-toggle {
+      flex: 1; padding: 8px; background: #fff8e6; color: #a07020;
+      border: none; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; cursor: pointer; text-align: center;
     }
 
-    .detail-item {}
-
-    .detail-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: #7aaa8a;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 4px;
+    /* ── PRODUCT FORM ── */
+    .product-form {
+      background: white; border: 1px solid #eaf3ec; border-radius: 16px; padding: 24px; margin-bottom: 28px; display: none;
+    }
+    .product-form.visible { display: block; }
+    .form-title { font-size: 15px; font-weight: 800; color: #0f2419; margin-bottom: 20px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-field { margin-bottom: 14px; }
+    .form-label {
+      display: block; font-size: 11px; font-weight: 700; color: #4a7a5a;
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%; padding: 11px 14px; border: 1.5px solid #d4e8dc;
+      border-radius: 10px; font-family: inherit; font-size: 14px;
+      color: #0f2419; background: white; outline: none;
+    }
+    .form-input:focus { border-color: #1a7a4a; }
+    .form-select {
+      width: 100%; padding: 11px 14px; border: 1.5px solid #d4e8dc;
+      border-radius: 10px; font-family: inherit; font-size: 14px;
+      color: #0f2419; background: white; outline: none; appearance: none;
+    }
+    .form-select:focus { border-color: #1a7a4a; }
+    .form-actions { display: flex; gap: 10px; margin-top: 4px; }
+    .btn-save {
+      padding: 11px 24px; background: #1a7a4a; color: white;
+      border: none; border-radius: 10px; font-family: inherit;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+    .btn-cancel-form {
+      padding: 11px 24px; background: #f0faf5; color: #4a7a5a;
+      border: none; border-radius: 10px; font-family: inherit;
+      font-size: 14px; font-weight: 700; cursor: pointer;
     }
 
-    .detail-value {
-      font-size: 14px;
-      font-weight: 600;
-      color: #0f2419;
+    /* ── FORM SHARED ── */
+    .label { display: block; font-size: 12px; font-weight: 700; color: #4a7a5a; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px; }
+    input[type="email"], input[type="password"] {
+      width: 100%; padding: 13px 14px; border: 1.5px solid #d4e8dc;
+      border-radius: 11px; font-family: inherit; font-size: 14px;
+      color: #0f2419; background: white; outline: none;
     }
-
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      padding-top: 20px;
-      border-top: 1px solid #eaf3ec;
+    input:focus { border-color: #1a7a4a; }
+    .field { margin-bottom: 16px; }
+    .error {
+      background: #fff0f0; border: 1px solid #ffcccc; color: #cc0000;
+      padding: 10px 14px; border-radius: 10px; font-size: 13px;
+      margin-bottom: 14px; display: none;
     }
-
-    .loading-row {
-      padding: 40px;
-      text-align: center;
-      color: #9ab8a4;
-      font-weight: 600;
+    .btn-login {
+      width: 100%; padding: 14px; background: #1a7a4a; color: white;
+      border: none; border-radius: 13px; font-family: inherit;
+      font-size: 15px; font-weight: 700; cursor: pointer;
     }
+    .btn-login:hover { background: #155f3a; }
 
-    @media (max-width: 768px) {
-      .content { padding: 20px 16px; }
+    .loading-row { padding: 40px; text-align: center; color: #9ab8a4; font-weight: 600; }
+
+    @media (max-width: 900px) {
       .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .products-grid { grid-template-columns: 1fr 1fr; }
+      .content { padding: 20px 16px; }
       .topbar { padding: 0 16px; }
+      .tab-nav { padding: 0 16px; }
     }
   </style>
 </head>
@@ -524,13 +323,15 @@
   <div class="auth-gate" id="authGate">
     <div class="auth-card">
       <div class="auth-logo">
-        <div class="logo-icon">N·</div>
-        <div class="logo-text">NUT <span>Financial Hub</span></div>
+        <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
+        <div>
+          <div class="auth-logo-name">NUT Lagos</div>
+          <div class="auth-logo-sub">Financial Hub</div>
+        </div>
       </div>
       <div class="auth-badge">🔐 Admin portal</div>
       <h2>Branch officer sign in</h2>
-      <p class="auth-sub">This portal is restricted to authorised NUT branch officers only.</p>
-
+      <p class="auth-sub">Restricted to authorised NUT Lagos branch officers only.</p>
       <div class="field">
         <label class="label">Email address</label>
         <input type="email" id="adminEmail" placeholder="officer@nut.org.ng" />
@@ -539,9 +340,7 @@
         <label class="label">Password</label>
         <input type="password" id="adminPassword" placeholder="••••••••" />
       </div>
-
       <div class="error" id="authError"></div>
-
       <button class="btn-login" onclick="adminLogin()">Sign in to portal</button>
     </div>
   </div>
@@ -549,91 +348,193 @@
   <!-- MAIN PORTAL -->
   <div class="main" id="mainPortal">
 
-    <!-- Topbar -->
     <div class="topbar">
       <div class="topbar-left">
-        <div class="logo-icon">N·</div>
-        <div class="topbar-title">NUT Financial Hub</div>
-        <div class="admin-badge">Admin Portal</div>
+        <div class="topbar-logo">
+          <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
+          <div class="topbar-title">NUT Lagos — Admin Portal</div>
+        </div>
+        <div class="admin-badge">Branch Officer</div>
       </div>
       <div class="topbar-right">
-        <div class="admin-name" id="adminName">Branch Officer</div>
+        <div class="admin-name" id="adminName"></div>
         <button class="btn-signout" onclick="adminSignOut()">Sign out</button>
       </div>
     </div>
 
-    <!-- Content -->
+    <!-- TAB NAV -->
+    <div class="tab-nav">
+      <button class="tab-nav-item active" onclick="switchTab('members', this)">👥 Members</button>
+      <button class="tab-nav-item" onclick="switchTab('loans', this)">💰 Loans</button>
+    </div>
+
     <div class="content">
 
-      <!-- Stats -->
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-label">Total applications</div>
-          <div class="stat-value" id="statTotal">—</div>
+      <!-- ══ MEMBERS TAB ══ -->
+      <div class="tab-panel active" id="tab-members">
+
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-label">Total applications</div><div class="stat-value" id="statTotal">—</div></div>
+          <div class="stat-card"><div class="stat-label">Pending review</div><div class="stat-value amber" id="statPending">—</div></div>
+          <div class="stat-card"><div class="stat-label">Approved members</div><div class="stat-value green" id="statApproved">—</div></div>
+          <div class="stat-card"><div class="stat-label">Rejected</div><div class="stat-value red" id="statRejected">—</div></div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Pending review</div>
-          <div class="stat-value amber" id="statPending">—</div>
+
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="filterApps('all', this)">All</button>
+          <button class="filter-tab" onclick="filterApps('pending', this)">Pending</button>
+          <button class="filter-tab" onclick="filterApps('approved', this)">Approved</button>
+          <button class="filter-tab" onclick="filterApps('rejected', this)">Rejected</button>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Approved</div>
-          <div class="stat-value green" id="statApproved">—</div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Member applications</div>
+            <div class="table-count" id="appCount">Loading...</div>
+          </div>
+          <div id="appTableBody"><div class="loading-row">Loading...</div></div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Rejected</div>
-          <div class="stat-value red" id="statRejected">—</div>
-        </div>
+
       </div>
 
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab active" onclick="filterApplications('all', this)">All</button>
-        <button class="tab" onclick="filterApplications('pending', this)">Pending</button>
-        <button class="tab" onclick="filterApplications('approved', this)">Approved</button>
-        <button class="tab" onclick="filterApplications('rejected', this)">Rejected</button>
-      </div>
+      <!-- ══ LOANS TAB ══ -->
+      <div class="tab-panel" id="tab-loans">
 
-      <!-- Table -->
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-title">Member applications</div>
-          <div class="table-count" id="tableCount">Loading...</div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-label">Total loan applications</div><div class="stat-value" id="loanStatTotal">—</div></div>
+          <div class="stat-card"><div class="stat-label">Pending approval</div><div class="stat-value amber" id="loanStatPending">—</div></div>
+          <div class="stat-card"><div class="stat-label">Active loans</div><div class="stat-value green" id="loanStatActive">—</div></div>
+          <div class="stat-card"><div class="stat-label">Overdue</div><div class="stat-value red" id="loanStatOverdue">—</div></div>
         </div>
-        <div id="tableBody">
-          <div class="loading-row">Loading applications...</div>
-        </div>
-      </div>
 
+        <!-- Loan Products -->
+        <div class="section-header">
+          <div class="section-heading">Loan products</div>
+          <button class="btn-new" onclick="showProductForm()">+ New product</button>
+        </div>
+
+        <!-- Product form -->
+        <div class="product-form" id="productForm">
+          <div class="form-title" id="productFormTitle">Create new loan product</div>
+          <div class="form-grid">
+            <div class="form-field">
+              <label class="form-label">Product name</label>
+              <input class="form-input" type="text" id="pName" placeholder="e.g. Salary Advance" />
+            </div>
+            <div class="form-field">
+              <label class="form-label">Icon (emoji)</label>
+              <input class="form-input" type="text" id="pIcon" placeholder="e.g. 💰" />
+            </div>
+            <div class="form-field">
+              <label class="form-label">Min amount (₦)</label>
+              <input class="form-input" type="number" id="pMinAmount" placeholder="e.g. 50000" />
+            </div>
+            <div class="form-field">
+              <label class="form-label">Max amount (₦)</label>
+              <input class="form-input" type="number" id="pMaxAmount" placeholder="e.g. 750000" />
+            </div>
+            <div class="form-field">
+              <label class="form-label">Interest rate (% per month)</label>
+              <input class="form-input" type="number" id="pRate" step="0.1" placeholder="e.g. 2.5" />
+            </div>
+            <div class="form-field">
+              <label class="form-label">Interest type</label>
+              <select class="form-select" id="pInterestType">
+                <option value="flat">Flat rate</option>
+                <option value="reducing">Reducing balance</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Processing fee (₦)</label>
+              <input class="form-input" type="number" id="pFee" placeholder="e.g. 3500" />
+            </div>
+            <div class="form-field">
+              <label class="form-label">Available tenures (months)</label>
+              <input class="form-input" type="text" id="pTenures" placeholder="e.g. 1,3,6,12" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Description</label>
+            <input class="form-input" type="text" id="pDesc" placeholder="Short description for members" />
+          </div>
+          <div class="form-actions">
+            <button class="btn-save" onclick="saveProduct()">Save product</button>
+            <button class="btn-cancel-form" onclick="hideProductForm()">Cancel</button>
+          </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+          <div class="loading-row" style="grid-column:1/-1">Loading products...</div>
+        </div>
+
+        <!-- Loan Applications -->
+        <div class="section-header">
+          <div class="section-heading">Loan applications</div>
+        </div>
+
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="filterLoans('all', this)">All</button>
+          <button class="filter-tab" onclick="filterLoans('pending', this)">Pending</button>
+          <button class="filter-tab" onclick="filterLoans('approved', this)">Approved</button>
+          <button class="filter-tab" onclick="filterLoans('disbursed', this)">Disbursed</button>
+          <button class="filter-tab" onclick="filterLoans('overdue', this)">Overdue</button>
+          <button class="filter-tab" onclick="filterLoans('rejected', this)">Rejected</button>
+        </div>
+
+        <div class="table-card" style="margin-bottom:28px">
+          <div class="table-header">
+            <div class="table-title">Loan applications</div>
+            <div class="table-count" id="loanCount">Loading...</div>
+          </div>
+          <div id="loanTableBody"><div class="loading-row">Loading...</div></div>
+        </div>
+
+      </div>
     </div>
   </div>
 
-  <!-- DETAIL MODAL -->
-  <div class="modal-overlay" id="modalOverlay">
+  <!-- MEMBER DETAIL MODAL -->
+  <div class="modal-backdrop" id="memberModal">
     <div class="modal">
       <div class="modal-header">
-        <div class="modal-title">Application detail</div>
-        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div class="modal-title">Member application</div>
+        <button class="modal-close" onclick="closeModal('memberModal')">✕</button>
       </div>
-      <div id="modalContent"></div>
-      <div class="modal-actions" id="modalActions"></div>
+      <div id="memberModalContent"></div>
+      <div class="modal-actions" id="memberModalActions"></div>
+    </div>
+  </div>
+
+  <!-- LOAN DETAIL MODAL -->
+  <div class="modal-backdrop" id="loanModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Loan application detail</div>
+        <button class="modal-close" onclick="closeModal('loanModal')">✕</button>
+      </div>
+      <div id="loanModalContent"></div>
+      <div class="modal-actions" id="loanModalActions"></div>
     </div>
   </div>
 
   <script type="module">
     import { auth, db } from './js/firebase.js';
     import {
-      signInWithEmailAndPassword,
-      signOut,
-      onAuthStateChanged,
-      createUserWithEmailAndPassword,
-      sendPasswordResetEmail
+      signInWithEmailAndPassword, signOut, onAuthStateChanged,
+      createUserWithEmailAndPassword, sendPasswordResetEmail
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
-      collection, getDocs, doc, updateDoc, setDoc, query, orderBy
+      collection, getDocs, doc, updateDoc, setDoc,
+      addDoc, query, orderBy, getDoc
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     let allApplications = [];
-    let currentFilter = 'all';
+    let allLoans = [];
+    let allProducts = [];
+    let currentAppFilter = 'all';
+    let currentLoanFilter = 'all';
+    let editingProductId = null;
+    let verifiedSalaries = {};
 
     // ── Auth ──
     onAuthStateChanged(auth, (user) => {
@@ -642,6 +543,8 @@
         document.getElementById('mainPortal').style.display = 'block';
         document.getElementById('adminName').textContent = user.email;
         loadApplications();
+        loadProducts();
+        loadLoans();
       } else {
         document.getElementById('authGate').style.display = 'flex';
         document.getElementById('mainPortal').style.display = 'none';
@@ -653,13 +556,7 @@
       const password = document.getElementById('adminPassword').value;
       const errorBox = document.getElementById('authError');
       errorBox.style.display = 'none';
-
-      if (!email || !password) {
-        errorBox.textContent = 'Please enter your email and password.';
-        errorBox.style.display = 'block';
-        return;
-      }
-
+      if (!email || !password) { errorBox.textContent = 'Please enter your email and password.'; errorBox.style.display = 'block'; return; }
       try {
         await signInWithEmailAndPassword(auth, email, password);
       } catch (err) {
@@ -668,303 +565,470 @@
       }
     };
 
-    window.adminSignOut = async function () {
-      await signOut(auth);
+    window.adminSignOut = async function () { await signOut(auth); };
+
+    // ── Tab switching ──
+    window.switchTab = function (tab, btn) {
+      document.querySelectorAll('.tab-nav-item').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
     };
 
     // ── Load applications ──
     async function loadApplications() {
       try {
         const q = query(collection(db, 'applications'), orderBy('submittedAt', 'desc'));
-        const snapshot = await getDocs(q);
-        allApplications = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        updateStats();
-        renderTable(allApplications);
+        const snap = await getDocs(q);
+        allApplications = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        updateMemberStats();
+        renderAppTable(allApplications);
       } catch (err) {
-        console.error(err);
-        document.getElementById('tableBody').innerHTML =
-          '<div class="loading-row">Error loading applications. Please refresh.</div>';
+        document.getElementById('appTableBody').innerHTML = '<div class="loading-row">Error loading. Please refresh.</div>';
       }
     }
 
-    function updateStats() {
-      const total = allApplications.length;
-      const pending = allApplications.filter(a => a.status === 'pending').length;
-      const approved = allApplications.filter(a => a.status === 'approved').length;
-      const rejected = allApplications.filter(a => a.status === 'rejected').length;
-      document.getElementById('statTotal').textContent = total;
-      document.getElementById('statPending').textContent = pending;
-      document.getElementById('statApproved').textContent = approved;
-      document.getElementById('statRejected').textContent = rejected;
+    function updateMemberStats() {
+      document.getElementById('statTotal').textContent = allApplications.length;
+      document.getElementById('statPending').textContent = allApplications.filter(a => a.status === 'pending').length;
+      document.getElementById('statApproved').textContent = allApplications.filter(a => a.status === 'approved').length;
+      document.getElementById('statRejected').textContent = allApplications.filter(a => a.status === 'rejected').length;
     }
 
-    // ── Filter ──
-    window.filterApplications = function (filter, btn) {
-      currentFilter = filter;
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    window.filterApps = function (filter, btn) {
+      currentAppFilter = filter;
+      document.querySelectorAll('#tab-members .filter-tab').forEach(t => t.classList.remove('active'));
       btn.classList.add('active');
-      const filtered = filter === 'all'
-        ? allApplications
-        : allApplications.filter(a => a.status === filter);
-      renderTable(filtered);
+      const filtered = filter === 'all' ? allApplications : allApplications.filter(a => a.status === filter);
+      renderAppTable(filtered);
     };
 
-    // ── Render table ──
-    function renderTable(apps) {
-      document.getElementById('tableCount').textContent = apps.length + ' records';
-
-      if (apps.length === 0) {
-        document.getElementById('tableBody').innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">📭</div>
-            <div class="empty-text">No applications found</div>
-          </div>`;
+    function renderAppTable(apps) {
+      document.getElementById('appCount').textContent = apps.length + ' records';
+      if (!apps.length) {
+        document.getElementById('appTableBody').innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No applications found</div></div>`;
         return;
       }
-
-      const rows = apps.map(app => `
+      const rows = apps.map(a => `
         <tr>
-          <td>
-            <div class="td-name">${app.fullName || '—'}</div>
-            <div class="td-sub">${app.phone || '—'}</div>
-          </td>
-          <td>
-            <div>${app.schoolName || '—'}</div>
-            <div class="td-sub">${app.state || ''} · ${app.lga || ''}</div>
-          </td>
-          <td>${app.nutNumber || '—'}</td>
-          <td>${app.jobTitle || '—'}</td>
-          <td>${app.submittedAt ? new Date(app.submittedAt).toLocaleDateString('en-NG') : '—'}</td>
-          <td>
-            <span class="badge badge-${app.status || 'pending'}">
-              ${app.status === 'approved' ? '✅' : app.status === 'rejected' ? '❌' : '⏳'}
-              ${app.status || 'pending'}
-            </span>
-          </td>
+          <td><div class="td-name">${a.fullName || '—'}</div><div class="td-sub">${a.phone || ''}</div></td>
+          <td><div>${a.schoolName || '—'}</div><div class="td-sub">${a.state || ''} · ${a.lga || ''}</div></td>
+          <td>${a.nutNumber || '—'}</td>
+          <td>₦${Number(a.salary || 0).toLocaleString()}</td>
+          <td>${a.submittedAt ? new Date(a.submittedAt).toLocaleDateString('en-NG') : '—'}</td>
+          <td><span class="badge badge-${a.status || 'pending'}">${a.status === 'approved' ? '✅' : a.status === 'rejected' ? '❌' : '⏳'} ${a.status || 'pending'}</span></td>
           <td>
             <div class="action-btns">
-              <button class="btn-view" onclick="viewApplication('${app.id}')">View</button>
-              ${app.status === 'pending' ? `
-                <button class="btn-approve" onclick="approveApplication('${app.id}')">Approve</button>
-                <button class="btn-reject" onclick="rejectApplication('${app.id}')">Reject</button>
+              <button class="btn-view" onclick="viewMember('${a.id}')">View</button>
+              ${a.status === 'pending' ? `
+                <button class="btn-approve" onclick="approveMember('${a.id}')">Approve</button>
+                <button class="btn-reject" onclick="rejectMember('${a.id}')">Reject</button>
               ` : ''}
             </div>
           </td>
-        </tr>
-      `).join('');
-
-      document.getElementById('tableBody').innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Applicant</th>
-              <th>School</th>
-              <th>NUT Number</th>
-              <th>Job title</th>
-              <th>Submitted</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>`;
+        </tr>`).join('');
+      document.getElementById('appTableBody').innerHTML = `
+        <table><thead><tr>
+          <th>Applicant</th><th>School</th><th>NUT No.</th><th>Salary</th><th>Submitted</th><th>Status</th><th>Actions</th>
+        </tr></thead><tbody>${rows}</tbody></table>`;
     }
 
-    // ── View detail ──
-    window.viewApplication = function (id) {
-      const app = allApplications.find(a => a.id === id);
-      if (!app) return;
-
-      document.getElementById('modalContent').innerHTML = `
+    // ── View member ──
+    window.viewMember = function (id) {
+      const a = allApplications.find(x => x.id === id);
+      if (!a) return;
+      const verifiedSal = verifiedSalaries[id] || a.salary || '';
+      document.getElementById('memberModalContent').innerHTML = `
+        <div class="salary-verify-box">
+          <div class="salary-verify-title">⚠️ Verify declared salary before approval</div>
+          <div style="font-size:12px;color:#a07020;margin-bottom:10px;">Member declared: <strong>₦${Number(a.salary||0).toLocaleString()}/month</strong>. Confirm or correct the verified net salary below.</div>
+          <div class="salary-row">
+            <input class="salary-input" type="number" id="verifiedSalaryInput" value="${verifiedSal}" placeholder="Enter verified net salary" />
+            <button class="salary-confirm-btn" onclick="confirmSalary('${id}')">Confirm salary</button>
+          </div>
+          <div id="salaryConfirmed" style="font-size:12px;color:#1a7a4a;font-weight:700;margin-top:8px;display:none;">✅ Salary verified</div>
+        </div>
         <div class="detail-grid">
-          <div class="detail-item">
-            <div class="detail-label">Full name</div>
-            <div class="detail-value">${app.fullName || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Phone</div>
-            <div class="detail-value">${app.phone || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Email</div>
-            <div class="detail-value">${app.email || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Date of birth</div>
-            <div class="detail-value">${app.dob || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Gender</div>
-            <div class="detail-value">${app.gender || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">NUT number</div>
-            <div class="detail-value">${app.nutNumber || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">School</div>
-            <div class="detail-value">${app.schoolName || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">State / LGA</div>
-            <div class="detail-value">${app.state || '—'} · ${app.lga || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Job title</div>
-            <div class="detail-value">${app.jobTitle || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Years of service</div>
-            <div class="detail-value">${app.yearsService || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Monthly salary</div>
-            <div class="detail-value">₦${Number(app.salary || 0).toLocaleString()}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Status</div>
-            <div class="detail-value">
-              <span class="badge badge-${app.status || 'pending'}">
-                ${app.status || 'pending'}
-              </span>
-            </div>
-          </div>
-          <div class="detail-item" style="grid-column: 1/-1">
-            <div class="detail-label">Address</div>
-            <div class="detail-value">${app.address || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Next of kin</div>
-            <div class="detail-value">${app.nokName || '—'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">NOK phone</div>
-            <div class="detail-value">${app.nokPhone || '—'}</div>
-          </div>
+          <div><div class="detail-label">Full name</div><div class="detail-value">${a.fullName||'—'}</div></div>
+          <div><div class="detail-label">Phone</div><div class="detail-value">${a.phone||'—'}</div></div>
+          <div><div class="detail-label">Email</div><div class="detail-value">${a.email||'—'}</div></div>
+          <div><div class="detail-label">Date of birth</div><div class="detail-value">${a.dob||'—'}</div></div>
+          <div><div class="detail-label">Gender</div><div class="detail-value">${a.gender||'—'}</div></div>
+          <div><div class="detail-label">NUT number</div><div class="detail-value">${a.nutNumber||'—'}</div></div>
+          <div><div class="detail-label">School</div><div class="detail-value">${a.schoolName||'—'}</div></div>
+          <div><div class="detail-label">State / LGA</div><div class="detail-value">${a.state||'—'} · ${a.lga||'—'}</div></div>
+          <div><div class="detail-label">Job title</div><div class="detail-value">${a.jobTitle||'—'}</div></div>
+          <div><div class="detail-label">Years of service</div><div class="detail-value">${a.yearsService||'—'}</div></div>
+          <div><div class="detail-label">Declared salary</div><div class="detail-value">₦${Number(a.salary||0).toLocaleString()}/mo</div></div>
+          <div><div class="detail-label">Status</div><div class="detail-value"><span class="badge badge-${a.status||'pending'}">${a.status||'pending'}</span></div></div>
+          <div style="grid-column:1/-1"><div class="detail-label">Address</div><div class="detail-value">${a.address||'—'}</div></div>
+          <div><div class="detail-label">Next of kin</div><div class="detail-value">${a.nokName||'—'}</div></div>
+          <div><div class="detail-label">NOK phone</div><div class="detail-value">${a.nokPhone||'—'}</div></div>
         </div>`;
 
-      document.getElementById('modalActions').innerHTML = app.status === 'pending' ? `
-        <button class="btn-approve" style="flex:1;padding:12px" onclick="approveApplication('${app.id}');closeModal()">
-          ✅ Approve application
-        </button>
-        <button class="btn-reject" style="flex:1;padding:12px" onclick="rejectApplication('${app.id}');closeModal()">
-          ❌ Reject application
-        </button>` : `
-        <div style="font-size:13px;color:#7aaa8a;font-weight:600">
-          This application has been ${app.status}.
-        </div>`;
+      document.getElementById('memberModalActions').innerHTML = a.status === 'pending' ? `
+        <button class="btn-approve" style="flex:1;padding:12px" onclick="approveMember('${a.id}');closeModal('memberModal')">✅ Approve</button>
+        <button class="btn-reject" style="flex:1;padding:12px" onclick="rejectMember('${a.id}');closeModal('memberModal')">❌ Reject</button>` :
+        `<div style="font-size:13px;color:#7aaa8a;font-weight:600">This application has been ${a.status}.</div>`;
 
-      document.getElementById('modalOverlay').style.display = 'flex';
+      document.getElementById('memberModal').style.display = 'flex';
+
+      if (verifiedSalaries[id]) {
+        document.getElementById('salaryConfirmed').style.display = 'block';
+      }
     };
 
-    window.closeModal = function () {
-      document.getElementById('modalOverlay').style.display = 'none';
+    window.confirmSalary = function (id) {
+      const val = document.getElementById('verifiedSalaryInput').value;
+      if (!val || isNaN(val)) { alert('Please enter a valid salary figure.'); return; }
+      verifiedSalaries[id] = Number(val);
+      document.getElementById('salaryConfirmed').style.display = 'block';
     };
 
-    // ── Approve ──
-   window.approveApplication = async function (id) {
+    // ── Approve member ──
+    window.approveMember = async function (id) {
       if (!confirm('Approve this application?')) return;
+      const a = allApplications.find(x => x.id === id);
+      if (!a) return;
+      if (!a.email) { alert('No email on file. Cannot create login account.'); return; }
 
-      const app = allApplications.find(a => a.id === id);
-      if (!app) return;
-
-      if (!app.email) {
-        alert('This applicant did not provide an email address. Cannot create login account. Please contact them to update their application.');
+      const verifiedSalary = verifiedSalaries[id];
+      if (!verifiedSalary) {
+        alert('Please verify and confirm the member\'s salary before approving. Open the member detail and confirm their salary first.');
         return;
       }
 
       try {
-        // Step 1 — Create Firebase Auth account for member
         const tempPassword = 'NUT@' + Math.random().toString(36).slice(-8);
         let uid = null;
-
         try {
-          const userCredential = await createUserWithEmailAndPassword(auth, app.email, tempPassword);
-          uid = userCredential.user.uid;
+          const cred = await createUserWithEmailAndPassword(auth, a.email, tempPassword);
+          uid = cred.user.uid;
         } catch (authErr) {
           if (authErr.code === 'auth/email-already-in-use') {
-            // Account already exists — still approve
-            console.log('Auth account already exists for this email');
-          } else {
-            throw authErr;
-          }
+            console.log('Account exists');
+          } else throw authErr;
         }
 
-        // Step 2 — Send password reset email so member sets their own password
-        await sendPasswordResetEmail(auth, app.email);
+        await sendPasswordResetEmail(auth, a.email);
 
-        // Step 3 — Save member profile to Firestore members collection
         if (uid) {
           await setDoc(doc(db, 'members', uid), {
-            fullName: app.fullName,
-            firstName: app.firstName,
-            lastName: app.lastName,
-            phone: app.phone,
-            email: app.email,
-            dob: app.dob,
-            gender: app.gender,
-            address: app.address,
-            nutNumber: app.nutNumber,
-            schoolName: app.schoolName,
-            state: app.state,
-            lga: app.lga,
-            jobTitle: app.jobTitle,
-            yearsService: app.yearsService,
-            salary: app.salary,
-            nokName: app.nokName,
-            nokRelation: app.nokRelation,
-            nokPhone: app.nokPhone,
-            kycStatus: 'pending',
-            walletBalance: 0,
-            memberId: 'NUT-' + app.state.substring(0,2).toUpperCase() + '-' + Date.now().toString().slice(-6),
-            status: 'approved',
-            approvedAt: new Date().toISOString(),
+            fullName: a.fullName, firstName: a.firstName, lastName: a.lastName,
+            phone: a.phone, email: a.email, dob: a.dob, gender: a.gender,
+            address: a.address, nutNumber: a.nutNumber, schoolName: a.schoolName,
+            state: a.state, lga: a.lga, jobTitle: a.jobTitle,
+            yearsService: a.yearsService,
+            declaredSalary: Number(a.salary || 0),
+            verifiedSalary: verifiedSalary,
+            nokName: a.nokName, nokRelation: a.nokRelation, nokPhone: a.nokPhone,
+            kycStatus: 'pending', walletBalance: 0,
+            memberId: 'NUT-LG-' + Date.now().toString().slice(-6),
+            status: 'approved', approvedAt: new Date().toISOString(),
           });
         }
 
-        // Step 4 — Update application status
         await updateDoc(doc(db, 'applications', id), {
-          status: 'approved',
-          reviewedAt: new Date().toISOString(),
-          uid: uid,
+          status: 'approved', reviewedAt: new Date().toISOString(),
+          verifiedSalary: verifiedSalary, uid,
         });
 
-        app.status = 'approved';
-        updateStats();
-        const filtered = currentFilter === 'all'
-          ? allApplications
-          : allApplications.filter(a => a.status === currentFilter);
-        renderTable(filtered);
-
-        alert('✅ Application approved!\n\nA login account has been created for ' + app.fullName + '.\n\nA password reset email has been sent to ' + app.email + ' so they can set their own password and log in.');
-
+        a.status = 'approved';
+        updateMemberStats();
+        renderAppTable(currentAppFilter === 'all' ? allApplications : allApplications.filter(x => x.status === currentAppFilter));
+        alert('✅ Approved! Password reset email sent to ' + a.email);
       } catch (err) {
         console.error(err);
-        alert('Error approving application: ' + err.message);
+        alert('Error: ' + err.message);
       }
     };
 
-    // ── Reject ──
-    window.rejectApplication = async function (id) {
+    // ── Reject member ──
+    window.rejectMember = async function (id) {
       if (!confirm('Reject this application?')) return;
       try {
-        await updateDoc(doc(db, 'applications', id), {
-          status: 'rejected',
-          reviewedAt: new Date().toISOString(),
-        });
-        const app = allApplications.find(a => a.id === id);
-        if (app) app.status = 'rejected';
-        updateStats();
-        const filtered = currentFilter === 'all'
-          ? allApplications
-          : allApplications.filter(a => a.status === currentFilter);
-        renderTable(filtered);
-        alert('Application rejected.');
+        await updateDoc(doc(db, 'applications', id), { status: 'rejected', reviewedAt: new Date().toISOString() });
+        const a = allApplications.find(x => x.id === id);
+        if (a) a.status = 'rejected';
+        updateMemberStats();
+        renderAppTable(currentAppFilter === 'all' ? allApplications : allApplications.filter(x => x.status === currentAppFilter));
+      } catch (err) { alert('Error: ' + err.message); }
+    };
+
+    // ── Load products ──
+    async function loadProducts() {
+      try {
+        const snap = await getDocs(collection(db, 'loanProducts'));
+        allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderProducts();
       } catch (err) {
-        console.error(err);
-        alert('Error rejecting application. Please try again.');
+        document.getElementById('productsGrid').innerHTML = '<div class="loading-row" style="grid-column:1/-1">Error loading products.</div>';
+      }
+    }
+
+    function renderProducts() {
+      if (!allProducts.length) {
+        document.getElementById('productsGrid').innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1">
+            <div class="empty-icon">📦</div>
+            <div class="empty-text">No loan products yet. Create your first one above.</div>
+          </div>`;
+        return;
+      }
+      document.getElementById('productsGrid').innerHTML = allProducts.map(p => `
+        <div class="product-card ${p.isActive ? '' : 'inactive'}">
+          <div class="product-status-badge ${p.isActive ? 'active' : 'inactive'}">${p.isActive ? '● Active' : '○ Inactive'}</div>
+          <span class="product-icon">${p.icon || '💰'}</span>
+          <div class="product-name">${p.name}</div>
+          <div class="product-rate">${p.rate}%/month · ${p.interestType === 'reducing' ? 'Reducing balance' : 'Flat rate'}</div>
+          <div class="product-detail">₦${Number(p.minAmount).toLocaleString()} – ₦${Number(p.maxAmount).toLocaleString()}</div>
+          <div class="product-detail">Tenures: ${p.tenures} months</div>
+          <div class="product-detail">Processing fee: ₦${Number(p.fee||0).toLocaleString()}</div>
+          <div class="product-actions">
+            <button class="btn-edit" onclick="editProduct('${p.id}')">Edit</button>
+            <button class="btn-toggle" onclick="toggleProduct('${p.id}', ${p.isActive})">${p.isActive ? 'Deactivate' : 'Activate'}</button>
+          </div>
+        </div>`).join('');
+    }
+
+    // ── Product form ──
+    window.showProductForm = function () {
+      editingProductId = null;
+      document.getElementById('productFormTitle').textContent = 'Create new loan product';
+      ['pName','pIcon','pMinAmount','pMaxAmount','pRate','pFee','pTenures','pDesc'].forEach(id => { document.getElementById(id).value = ''; });
+      document.getElementById('pInterestType').value = 'flat';
+      document.getElementById('productForm').classList.add('visible');
+      document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.hideProductForm = function () {
+      document.getElementById('productForm').classList.remove('visible');
+      editingProductId = null;
+    };
+
+    window.editProduct = function (id) {
+      const p = allProducts.find(x => x.id === id);
+      if (!p) return;
+      editingProductId = id;
+      document.getElementById('productFormTitle').textContent = 'Edit loan product';
+      document.getElementById('pName').value = p.name || '';
+      document.getElementById('pIcon').value = p.icon || '';
+      document.getElementById('pMinAmount').value = p.minAmount || '';
+      document.getElementById('pMaxAmount').value = p.maxAmount || '';
+      document.getElementById('pRate').value = p.rate || '';
+      document.getElementById('pInterestType').value = p.interestType || 'flat';
+      document.getElementById('pFee').value = p.fee || '';
+      document.getElementById('pTenures').value = p.tenures || '';
+      document.getElementById('pDesc').value = p.description || '';
+      document.getElementById('productForm').classList.add('visible');
+      document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.saveProduct = async function () {
+      const name = document.getElementById('pName').value.trim();
+      const icon = document.getElementById('pIcon').value.trim();
+      const minAmount = Number(document.getElementById('pMinAmount').value);
+      const maxAmount = Number(document.getElementById('pMaxAmount').value);
+      const rate = Number(document.getElementById('pRate').value);
+      const interestType = document.getElementById('pInterestType').value;
+      const fee = Number(document.getElementById('pFee').value);
+      const tenures = document.getElementById('pTenures').value.trim();
+      const description = document.getElementById('pDesc').value.trim();
+
+      if (!name || !minAmount || !maxAmount || !rate || !tenures) {
+        alert('Please fill in all required fields.'); return;
+      }
+
+      const data = {
+        name, icon: icon || '💰', minAmount, maxAmount, rate,
+        interestType, fee: fee || 0, tenures, description,
+        isActive: true, updatedAt: new Date().toISOString(),
+      };
+
+      try {
+        if (editingProductId) {
+          await updateDoc(doc(db, 'loanProducts', editingProductId), data);
+          const idx = allProducts.findIndex(p => p.id === editingProductId);
+          if (idx > -1) allProducts[idx] = { id: editingProductId, ...data };
+        } else {
+          data.createdAt = new Date().toISOString();
+          const ref = await addDoc(collection(db, 'loanProducts'), data);
+          allProducts.push({ id: ref.id, ...data });
+        }
+        renderProducts();
+        hideProductForm();
+        alert('✅ Loan product saved successfully.');
+      } catch (err) {
+        alert('Error saving product: ' + err.message);
       }
     };
+
+    window.toggleProduct = async function (id, isActive) {
+      try {
+        await updateDoc(doc(db, 'loanProducts', id), { isActive: !isActive });
+        const p = allProducts.find(x => x.id === id);
+        if (p) p.isActive = !isActive;
+        renderProducts();
+      } catch (err) { alert('Error: ' + err.message); }
+    };
+
+    // ── Load loans ──
+    async function loadLoans() {
+      try {
+        const q = query(collection(db, 'loans'), orderBy('appliedAt', 'desc'));
+        const snap = await getDocs(q);
+        allLoans = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        updateLoanStats();
+        renderLoanTable(allLoans);
+      } catch (err) {
+        document.getElementById('loanTableBody').innerHTML = '<div class="loading-row">Error loading loans.</div>';
+      }
+    }
+
+    function updateLoanStats() {
+      document.getElementById('loanStatTotal').textContent = allLoans.length;
+      document.getElementById('loanStatPending').textContent = allLoans.filter(l => l.status === 'pending').length;
+      document.getElementById('loanStatActive').textContent = allLoans.filter(l => l.status === 'disbursed').length;
+      document.getElementById('loanStatOverdue').textContent = allLoans.filter(l => l.status === 'overdue').length;
+    }
+
+    window.filterLoans = function (filter, btn) {
+      currentLoanFilter = filter;
+      document.querySelectorAll('#tab-loans .filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      const filtered = filter === 'all' ? allLoans : allLoans.filter(l => l.status === filter);
+      renderLoanTable(filtered);
+    };
+
+    function renderLoanTable(loans) {
+      document.getElementById('loanCount').textContent = loans.length + ' records';
+      if (!loans.length) {
+        document.getElementById('loanTableBody').innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No loan applications found</div></div>`;
+        return;
+      }
+      const rows = loans.map(l => `
+        <tr>
+          <td><div class="td-name">${l.memberName || '—'}</div><div class="td-sub">${l.memberId || ''}</div></td>
+          <td>${l.productName || '—'}</td>
+          <td>₦${Number(l.amount||0).toLocaleString()}</td>
+          <td>${l.tenure} months</td>
+          <td>₦${Number(l.monthlyInstalment||0).toLocaleString()}/mo</td>
+          <td>${l.appliedAt ? new Date(l.appliedAt).toLocaleDateString('en-NG') : '—'}</td>
+          <td><span class="badge badge-${l.status||'pending'}">${l.status||'pending'}</span></td>
+          <td>
+            <div class="action-btns">
+              <button class="btn-view" onclick="viewLoan('${l.id}')">View</button>
+              ${l.status === 'pending' ? `
+                <button class="btn-approve" onclick="approveLoan('${l.id}')">Approve</button>
+                <button class="btn-reject" onclick="rejectLoan('${l.id}')">Reject</button>` : ''}
+              ${l.status === 'approved' ? `<button class="btn-disburse" onclick="disburseLoan('${l.id}')">Mark disbursed</button>` : ''}
+              ${l.status === 'disbursed' || l.status === 'overdue' ? `<button class="btn-paid" onclick="markRepayment('${l.id}')">Record repayment</button>` : ''}
+            </div>
+          </td>
+        </tr>`).join('');
+      document.getElementById('loanTableBody').innerHTML = `
+        <table><thead><tr>
+          <th>Member</th><th>Product</th><th>Amount</th><th>Tenure</th><th>Monthly</th><th>Applied</th><th>Status</th><th>Actions</th>
+        </tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    // ── View loan ──
+    window.viewLoan = function (id) {
+      const l = allLoans.find(x => x.id === id);
+      if (!l) return;
+      document.getElementById('loanModalContent').innerHTML = `
+        <div class="detail-grid">
+          <div><div class="detail-label">Member name</div><div class="detail-value">${l.memberName||'—'}</div></div>
+          <div><div class="detail-label">Member ID</div><div class="detail-value">${l.memberId||'—'}</div></div>
+          <div><div class="detail-label">Product</div><div class="detail-value">${l.productName||'—'}</div></div>
+          <div><div class="detail-label">Amount requested</div><div class="detail-value">₦${Number(l.amount||0).toLocaleString()}</div></div>
+          <div><div class="detail-label">Tenure</div><div class="detail-value">${l.tenure} months</div></div>
+          <div><div class="detail-label">Interest type</div><div class="detail-value">${l.interestType||'—'}</div></div>
+          <div><div class="detail-label">Interest rate</div><div class="detail-value">${l.rate}%/month</div></div>
+          <div><div class="detail-label">Monthly instalment</div><div class="detail-value">₦${Number(l.monthlyInstalment||0).toLocaleString()}</div></div>
+          <div><div class="detail-label">Total repayable</div><div class="detail-value">₦${Number(l.totalRepayable||0).toLocaleString()}</div></div>
+          <div><div class="detail-label">Processing fee</div><div class="detail-value">₦${Number(l.processingFee||0).toLocaleString()}</div></div>
+          <div><div class="detail-label">Applied</div><div class="detail-value">${l.appliedAt ? new Date(l.appliedAt).toLocaleDateString('en-NG') : '—'}</div></div>
+          <div><div class="detail-label">Status</div><div class="detail-value"><span class="badge badge-${l.status||'pending'}">${l.status||'pending'}</span></div></div>
+          <div><div class="detail-label">Verified salary</div><div class="detail-value">₦${Number(l.verifiedSalary||0).toLocaleString()}/mo</div></div>
+          <div><div class="detail-label">Salary capacity used</div><div class="detail-value">${l.salaryPercent||'—'}% of net income</div></div>
+        </div>`;
+      document.getElementById('loanModalActions').innerHTML = `
+        ${l.status === 'pending' ? `
+          <button class="btn-approve" style="flex:1;padding:12px" onclick="approveLoan('${l.id}');closeModal('loanModal')">✅ Approve</button>
+          <button class="btn-reject" style="flex:1;padding:12px" onclick="rejectLoan('${l.id}');closeModal('loanModal')">❌ Reject</button>` : ''}
+        ${l.status === 'approved' ? `<button class="btn-disburse" style="flex:1;padding:12px" onclick="disburseLoan('${l.id}');closeModal('loanModal')">Mark as disbursed</button>` : ''}
+        ${l.status === 'disbursed' || l.status === 'overdue' ? `<button class="btn-paid" style="flex:1;padding:12px" onclick="markRepayment('${l.id}');closeModal('loanModal')">Record repayment</button>` : ''}`;
+      document.getElementById('loanModal').style.display = 'flex';
+    };
+
+    // ── Approve loan ──
+    window.approveLoan = async function (id) {
+      if (!confirm('Approve this loan application?')) return;
+      try {
+        await updateDoc(doc(db, 'loans', id), { status: 'approved', approvedAt: new Date().toISOString() });
+        const l = allLoans.find(x => x.id === id);
+        if (l) l.status = 'approved';
+        updateLoanStats();
+        renderLoanTable(currentLoanFilter === 'all' ? allLoans : allLoans.filter(x => x.status === currentLoanFilter));
+        alert('✅ Loan approved. Please disburse funds and mark as disbursed.');
+      } catch (err) { alert('Error: ' + err.message); }
+    };
+
+    // ── Reject loan ──
+    window.rejectLoan = async function (id) {
+      if (!confirm('Reject this loan application?')) return;
+      try {
+        await updateDoc(doc(db, 'loans', id), { status: 'rejected', rejectedAt: new Date().toISOString() });
+        const l = allLoans.find(x => x.id === id);
+        if (l) l.status = 'rejected';
+        updateLoanStats();
+        renderLoanTable(currentLoanFilter === 'all' ? allLoans : allLoans.filter(x => x.status === currentLoanFilter));
+      } catch (err) { alert('Error: ' + err.message); }
+    };
+
+    // ── Disburse loan ──
+    window.disburseLoan = async function (id) {
+      if (!confirm('Confirm funds have been transferred to the member?')) return;
+      try {
+        await updateDoc(doc(db, 'loans', id), { status: 'disbursed', disbursedAt: new Date().toISOString() });
+        const l = allLoans.find(x => x.id === id);
+        if (l) l.status = 'disbursed';
+        updateLoanStats();
+        renderLoanTable(currentLoanFilter === 'all' ? allLoans : allLoans.filter(x => x.status === currentLoanFilter));
+        alert('✅ Loan marked as disbursed.');
+      } catch (err) { alert('Error: ' + err.message); }
+    };
+
+    // ── Record repayment ──
+    window.markRepayment = async function (id) {
+      const amount = prompt('Enter repayment amount received (₦):');
+      if (!amount || isNaN(amount)) return;
+      try {
+        const l = allLoans.find(x => x.id === id);
+        const newBalance = Math.max(0, Number(l.outstandingBalance || l.totalRepayable || 0) - Number(amount));
+        const newStatus = newBalance <= 0 ? 'completed' : 'disbursed';
+        await updateDoc(doc(db, 'loans', id), {
+          outstandingBalance: newBalance,
+          status: newStatus,
+          lastRepaymentAt: new Date().toISOString(),
+          lastRepaymentAmount: Number(amount),
+        });
+        if (l) { l.outstandingBalance = newBalance; l.status = newStatus; }
+        updateLoanStats();
+        renderLoanTable(currentLoanFilter === 'all' ? allLoans : allLoans.filter(x => x.status === currentLoanFilter));
+        alert(`✅ Repayment of ₦${Number(amount).toLocaleString()} recorded. Outstanding: ₦${newBalance.toLocaleString()}`);
+      } catch (err) { alert('Error: ' + err.message); }
+    };
+
+    // ── Modal ──
+    window.closeModal = function (id) { document.getElementById(id).style.display = 'none'; };
+
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-backdrop')) {
+        e.target.style.display = 'none';
+      }
+    });
   </script>
 
 </body>
