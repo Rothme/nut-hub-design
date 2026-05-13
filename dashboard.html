@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NUT Financial Hub — Dashboard</title>
+  <title>NUT Lagos — Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,15 +11,20 @@
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: #f0faf5;
-      min-height: 100vh;
       color: #0f2419;
       -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PAGE WRAPPER — centres content on desktop ── */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
     }
 
     /* ── HEADER ── */
     .header {
       background: linear-gradient(135deg, #1a7a4a 0%, #0f5233 100%);
-      padding: 20px 20px 60px;
+      padding: 20px 24px 60px;
       position: relative;
       overflow: hidden;
     }
@@ -27,10 +32,8 @@
     .header::before {
       content: '';
       position: absolute;
-      right: -60px;
-      top: -60px;
-      width: 220px;
-      height: 220px;
+      right: -60px; top: -60px;
+      width: 220px; height: 220px;
       border-radius: 50%;
       border: 36px solid rgba(255,255,255,0.06);
     }
@@ -38,293 +41,199 @@
     .header::after {
       content: '';
       position: absolute;
-      right: -20px;
-      top: -20px;
-      width: 140px;
-      height: 140px;
+      right: -20px; top: -20px;
+      width: 140px; height: 140px;
       border-radius: 50%;
       border: 24px solid rgba(255,255,255,0.08);
     }
 
     .header-top {
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
-      position: relative;
+      margin-bottom: 24px; position: relative;
     }
 
-    .logo-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .header-logo { display: flex; align-items: center; gap: 10px; }
+    .header-logo img { width: 36px; height: 36px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.9; }
+    .header-logo-text { font-size: 14px; font-weight: 800; color: white; letter-spacing: -0.02em; }
 
-    .logo-icon {
-      width: 36px;
-      height: 36px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 800;
-      font-size: 15px;
-    }
-
-    .logo-name {
-      font-size: 15px;
-      font-weight: 800;
-      color: white;
-      letter-spacing: -0.02em;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 10px;
-    }
+    .header-actions { display: flex; gap: 10px; }
 
     .icon-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.12);
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      color: white;
+      width: 38px; height: 38px; border-radius: 10px;
+      background: rgba(255,255,255,0.12); border: none;
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: center; font-size: 18px; color: white;
       transition: background 0.15s;
     }
-
     .icon-btn:hover { background: rgba(255,255,255,0.2); }
 
-    .greeting {
-      color: rgba(255,255,255,0.8);
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-
-    .member-name {
-      color: white;
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      margin-bottom: 4px;
-    }
-
-    .member-id {
-      color: rgba(255,255,255,0.6);
-      font-size: 12px;
-      font-family: monospace;
-      letter-spacing: 0.04em;
-    }
+    .greeting { color: rgba(255,255,255,0.75); font-size: 14px; margin-bottom: 4px; position: relative; }
+    .member-name { color: white; font-size: 22px; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 4px; position: relative; }
+    .member-id { color: rgba(255,255,255,0.55); font-size: 12px; font-family: monospace; letter-spacing: 0.04em; position: relative; }
 
     /* ── BALANCE CARD ── */
     .balance-card {
       margin: -40px 16px 0;
-      background: white;
-      border-radius: 20px;
+      background: white; border-radius: 20px;
       padding: 20px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 16px 40px rgba(0,0,0,0.08);
-      position: relative;
-      z-index: 10;
+      position: relative; z-index: 10;
       margin-bottom: 20px;
     }
 
     .balance-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #6b8a75;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 6px;
+      font-size: 12px; font-weight: 700; color: #6b8a75;
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
     }
 
     .balance-amount {
-      font-size: 36px;
-      font-weight: 800;
-      color: #0f2419;
-      letter-spacing: -0.03em;
-      margin-bottom: 16px;
+      font-size: 36px; font-weight: 800; color: #0f2419;
+      letter-spacing: -0.03em; margin-bottom: 18px;
     }
 
-    .balance-amount span {
-      font-size: 22px;
-      opacity: 0.5;
-      margin-right: 2px;
-    }
+    .balance-amount span { font-size: 22px; opacity: 0.5; margin-right: 2px; }
 
     .balance-actions {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
     }
 
     .balance-action {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px; cursor: pointer;
+      border: none; background: none; font-family: inherit;
+      padding: 4px;
     }
 
     .balance-action-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: #f0faf5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      transition: background 0.15s;
+      width: 46px; height: 46px; border-radius: 14px;
+      background: #f0faf5; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 20px; transition: background 0.15s;
     }
 
-    .balance-action-icon:hover { background: #d4e8dc; }
+    .balance-action:hover .balance-action-icon { background: #d4e8dc; }
 
     .balance-action-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: #4a7a5a;
+      font-size: 11px; font-weight: 600; color: #4a7a5a;
     }
 
     /* ── KYC BANNER ── */
     .kyc-banner {
       margin: 0 16px 20px;
       background: linear-gradient(135deg, #fff8e6, #fff3d4);
-      border: 1px solid #f5d98a;
-      border-radius: 16px;
-      padding: 16px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
+      border: 1px solid #f5d98a; border-radius: 16px;
+      padding: 16px; display: none;
     }
 
+    .kyc-banner-inner { display: flex; gap: 12px; align-items: flex-start; }
     .kyc-icon { font-size: 24px; flex-shrink: 0; }
-
-    .kyc-text { flex: 1; }
-
-    .kyc-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #7a5200;
-      margin-bottom: 4px;
-    }
-
-    .kyc-sub {
-      font-size: 12px;
-      color: #a07020;
-      line-height: 1.5;
-    }
-
+    .kyc-title { font-size: 14px; font-weight: 700; color: #7a5200; margin-bottom: 4px; }
+    .kyc-sub { font-size: 12px; color: #a07020; line-height: 1.5; }
     .kyc-btn {
-      margin-top: 10px;
-      padding: 8px 14px;
-      background: #f5a623;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
+      margin-top: 10px; padding: 8px 14px;
+      background: #f5a623; color: white; border: none;
+      border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; cursor: pointer;
     }
 
     /* ── CONTENT ── */
     .content { padding: 0 16px 100px; }
 
     .section-header {
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
-      margin-top: 4px;
+      margin-bottom: 12px; margin-top: 8px;
     }
 
-    .section-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #0f2419;
-    }
+    .section-title { font-size: 15px; font-weight: 800; color: #0f2419; }
 
     .section-link {
-      font-size: 13px;
-      font-weight: 600;
-      color: #1a7a4a;
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-family: inherit;
+      font-size: 13px; font-weight: 600; color: #1a7a4a;
+      cursor: pointer; background: none; border: none;
+      font-family: inherit; text-decoration: none;
+    }
+
+    /* ── LOAN PRODUCTS SCROLL ── */
+    .loans-scroll {
+      display: flex; gap: 12px;
+      overflow-x: auto; padding-bottom: 8px;
+      margin-bottom: 24px;
+      scrollbar-width: none;
+    }
+    .loans-scroll::-webkit-scrollbar { display: none; }
+
+    .loan-card {
+      background: white; border: 1px solid #eaf3ec;
+      border-radius: 16px; padding: 16px;
+      min-width: 150px; flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .loan-card:hover { border-color: #c8e6d4; box-shadow: 0 4px 16px rgba(26,122,74,0.08); }
+
+    .loan-card-icon { font-size: 26px; margin-bottom: 10px; display: block; }
+    .loan-card-name { font-size: 13px; font-weight: 800; color: #0f2419; margin-bottom: 3px; }
+    .loan-card-rate { font-size: 11px; font-weight: 700; color: #1a7a4a; margin-bottom: 3px; }
+    .loan-card-max { font-size: 11px; color: #7aaa8a; margin-bottom: 12px; }
+
+    .loan-card-btn {
+      width: 100%; padding: 9px;
+      background: #1a7a4a; color: white;
+      border: none; border-radius: 9px;
+      font-family: inherit; font-size: 12px;
+      font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .loan-card-btn:hover { background: #155f3a; }
+
+    .no-products {
+      background: white; border: 1px dashed #d4e8dc;
+      border-radius: 14px; padding: 24px;
+      text-align: center; color: #9ab8a4;
+      font-size: 13px; font-weight: 600;
+      width: 100%;
     }
 
     /* ── QUICK ACCESS ── */
     .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 24px;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; margin-bottom: 24px;
     }
 
     .quick-card {
-      background: white;
-      border-radius: 16px;
-      padding: 16px 12px;
-      text-align: center;
-      cursor: pointer;
-      border: 1px solid #eaf3ec;
-      transition: box-shadow 0.15s;
+      background: white; border-radius: 16px;
+      padding: 16px 12px; text-align: center;
+      cursor: pointer; border: 1px solid #eaf3ec;
+      transition: all 0.15s;
+      text-decoration: none; display: block;
     }
 
-    .quick-card:hover {
-      box-shadow: 0 4px 16px rgba(26,122,74,0.1);
-    }
+    .quick-card:hover { box-shadow: 0 4px 16px rgba(26,122,74,0.1); border-color: #c8e6d4; }
 
-    .quick-icon { font-size: 28px; margin-bottom: 8px; }
-
-    .quick-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #0f2419;
-      margin-bottom: 4px;
-    }
-
-    .quick-sub {
-      font-size: 11px;
-      color: #9ab8a4;
-    }
+    .quick-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+    .quick-label { font-size: 13px; font-weight: 700; color: #0f2419; margin-bottom: 3px; }
+    .quick-sub { font-size: 11px; color: #9ab8a4; }
 
     /* ── TRANSACTIONS ── */
     .txn-card {
-      background: white;
-      border-radius: 16px;
-      border: 1px solid #eaf3ec;
-      overflow: hidden;
-      margin-bottom: 24px;
+      background: white; border-radius: 16px;
+      border: 1px solid #eaf3ec; overflow: hidden;
+      margin-bottom: 20px;
     }
 
     .txn-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      border-bottom: 1px dashed #eaf3ec;
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; border-bottom: 1px dashed #eaf3ec;
     }
 
     .txn-row:last-child { border-bottom: none; }
 
     .txn-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center;
+      justify-content: center; font-size: 18px; flex-shrink: 0;
     }
 
     .txn-icon.green { background: #f0faf5; }
@@ -333,105 +242,59 @@
     .txn-info { flex: 1; min-width: 0; }
 
     .txn-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #0f2419;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 14px; font-weight: 600; color: #0f2419;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
-    .txn-date {
-      font-size: 12px;
-      color: #9ab8a4;
-      margin-top: 2px;
-    }
+    .txn-date { font-size: 12px; color: #9ab8a4; margin-top: 2px; }
 
-    .txn-amount {
-      font-size: 14px;
-      font-weight: 700;
-      text-align: right;
-    }
-
+    .txn-amount { font-size: 14px; font-weight: 700; text-align: right; }
     .txn-amount.credit { color: #1a7a4a; }
     .txn-amount.debit { color: #0f2419; }
 
     /* ── BOTTOM NAV ── */
     .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      border-top: 1px solid #eaf3ec;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      padding: 8px 0 12px;
-      z-index: 100;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: white; border-top: 1px solid #eaf3ec;
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      padding: 8px 0 12px; z-index: 100;
       box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
     }
 
+    /* Centre the nav content on desktop */
+    @media (min-width: 860px) {
+      .bottom-nav { max-width: 860px; left: 50%; transform: translateX(-50%); border-radius: 0 0 0 0; }
+    }
+
     .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      padding: 4px;
-      border: none;
-      background: none;
-      font-family: inherit;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 4px;
+      cursor: pointer; padding: 4px;
+      border: none; background: none; font-family: inherit;
     }
 
     .nav-icon { font-size: 22px; }
-
-    .nav-label {
-      font-size: 10px;
-      font-weight: 600;
-      color: #9ab8a4;
-    }
-
+    .nav-label { font-size: 10px; font-weight: 600; color: #9ab8a4; }
     .nav-item.active .nav-label { color: #1a7a4a; }
-
-    .nav-dot {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: #1a7a4a;
-      opacity: 0;
-    }
-
+    .nav-dot { width: 4px; height: 4px; border-radius: 50%; background: #1a7a4a; opacity: 0; }
     .nav-item.active .nav-dot { opacity: 1; }
 
     /* ── LOADING ── */
     .loading-screen {
-      position: fixed;
-      inset: 0;
-      background: #f0faf5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 16px;
-      z-index: 999;
+      position: fixed; inset: 0; background: #f0faf5;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px; z-index: 999;
     }
 
     .loading-logo {
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, #1a7a4a, #0f5233);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 800;
-      font-size: 22px;
+      width: 64px; height: 64px;
+      display: flex; align-items: center; justify-content: center;
     }
 
+    .loading-logo img { width: 64px; height: 64px; object-fit: contain; }
+
     .loading-spinner {
-      width: 28px;
-      height: 28px;
+      width: 28px; height: 28px;
       border: 3px solid #d4e8dc;
       border-top-color: #1a7a4a;
       border-radius: 50%;
@@ -439,145 +302,167 @@
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── DESKTOP ADJUSTMENTS ── */
+    @media (min-width: 600px) {
+      .quick-grid { grid-template-columns: repeat(6, 1fr); }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Loading screen -->
   <div class="loading-screen" id="loadingScreen">
-    <div class="loading-logo">N·</div>
+    <div class="loading-logo">
+      <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
+    </div>
     <div class="loading-spinner"></div>
   </div>
 
-  <!-- Header -->
-  <div class="header">
-    <div class="header-top">
-      <div class="logo-row">
-        <div class="logo-icon">N·</div>
-        <div class="logo-name">NUT Financial Hub</div>
-      </div>
-      <div class="header-actions">
-        <button class="icon-btn">🔔</button>
-        <button class="icon-btn" onclick="signOut()">⏻</button>
-      </div>
-    </div>
-    <div class="greeting" id="greeting">Good morning,</div>
-    <div class="member-name" id="memberName">Loading...</div>
-    <div class="member-id" id="memberId">NUT-··-···-·····</div>
-  </div>
+  <div class="page-wrap">
 
-  <!-- Balance card -->
-  <div class="balance-card">
-    <div class="balance-label">Wallet balance</div>
-    <div class="balance-amount"><span>₦</span><span id="balance">0.00</span></div>
-    <div class="balance-actions">
-      <div class="balance-action">
-        <div class="balance-action-icon">💳</div>
-        <div class="balance-action-label">Fund</div>
-      </div>
-      <div class="balance-action">
-        <div class="balance-action-icon">📤</div>
-        <div class="balance-action-label">Transfer</div>
-      </div>
-      <div class="balance-action">
-        <div class="balance-action-icon">🏦</div>
-        <div class="balance-action-label">Withdraw</div>
-      </div>
-      <div class="balance-action">
-        <div class="balance-action-icon">📋</div>
-        <div class="balance-action-label">Statement</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- KYC pending banner -->
-  <div class="kyc-banner" id="kycBanner" style="display:none">
-    <div class="kyc-icon">⚠️</div>
-    <div class="kyc-text">
-      <div class="kyc-title">Complete your verification</div>
-      <div class="kyc-sub">Your account is under review. Full access will be granted once your ID is verified by our team.</div>
-      <button class="kyc-btn" onclick="window.location.href='kyc-bvn.html'">Continue verification →</button>
-    </div>
-  </div>
-
-  <!-- Main content -->
-  <div class="content">
-
-    <div class="section-header">
-      <div class="section-title">Quick access</div>
-    </div>
-
-    <div class="quick-grid">
-      <div class="quick-card" onclick="window.location.href='#loans'">
-        <div class="quick-icon">💰</div>
-        <div class="quick-label">Loans</div>
-        <div class="quick-sub">Apply now</div>
-      </div>
-      <div class="quick-card" onclick="window.location.href='#savings'">
-        <div class="quick-icon">🏦</div>
-        <div class="quick-label">Savings</div>
-        <div class="quick-sub">Set a goal</div>
-      </div>
-      <div class="quick-card" onclick="window.location.href='#insurance'">
-        <div class="quick-icon">🛡️</div>
-        <div class="quick-label">Insurance</div>
-        <div class="quick-sub">Get covered</div>
-      </div>
-      <div class="quick-card">
-        <div class="quick-icon">📊</div>
-        <div class="quick-label">Statements</div>
-        <div class="quick-sub">Download</div>
-      </div>
-      <div class="quick-card">
-        <div class="quick-icon">🪪</div>
-        <div class="quick-label">Member ID</div>
-        <div class="quick-sub">Digital card</div>
-      </div>
-      <div class="quick-card">
-        <div class="quick-icon">🎁</div>
-        <div class="quick-label">Benefits</div>
-        <div class="quick-sub">View all</div>
-      </div>
-    </div>
-
-    <div class="section-header">
-      <div class="section-title">Recent transactions</div>
-      <button class="section-link">See all</button>
-    </div>
-
-    <div class="txn-card">
-      <div class="txn-row">
-        <div class="txn-icon green">💰</div>
-        <div class="txn-info">
-          <div class="txn-title">Loan disbursement</div>
-          <div class="txn-date">Today · 9:14 AM</div>
+    <!-- Header -->
+    <div class="header">
+      <div class="header-top">
+        <div class="header-logo">
+          <img src="NUT_LOGO-removebg-preview.png" alt="NUT Lagos" />
+          <div class="header-logo-text">NUT Lagos</div>
         </div>
-        <div class="txn-amount credit">+₦420,000</div>
-      </div>
-      <div class="txn-row">
-        <div class="txn-icon red">📤</div>
-        <div class="txn-info">
-          <div class="txn-title">April repayment</div>
-          <div class="txn-date">25 Apr · Auto-debit</div>
+        <div class="header-actions">
+          <button class="icon-btn" onclick="window.location.href='dashboard.html'">🔔</button>
+          <button class="icon-btn" onclick="doSignOut()">⏻</button>
         </div>
-        <div class="txn-amount debit">−₦27,500</div>
       </div>
-      <div class="txn-row">
-        <div class="txn-icon green">🛡️</div>
-        <div class="txn-info">
-          <div class="txn-title">Insurance premium</div>
-          <div class="txn-date">1 Apr · Motor cover</div>
+      <div class="greeting" id="greeting">Good morning,</div>
+      <div class="member-name" id="memberName">Loading...</div>
+      <div class="member-id" id="memberId">NUT-··-···-·····</div>
+    </div>
+
+    <!-- Balance card -->
+    <div class="balance-card">
+      <div class="balance-label">Wallet balance</div>
+      <div class="balance-amount"><span>₦</span><span id="balance">0.00</span></div>
+      <div class="balance-actions">
+        <button class="balance-action" onclick="window.location.href='#fund'">
+          <div class="balance-action-icon">💳</div>
+          <div class="balance-action-label">Fund</div>
+        </button>
+        <button class="balance-action" onclick="window.location.href='#transfer'">
+          <div class="balance-action-icon">📤</div>
+          <div class="balance-action-label">Transfer</div>
+        </button>
+        <button class="balance-action" onclick="window.location.href='#withdraw'">
+          <div class="balance-action-icon">🏦</div>
+          <div class="balance-action-label">Withdraw</div>
+        </button>
+        <button class="balance-action" onclick="window.location.href='#statement'">
+          <div class="balance-action-icon">📋</div>
+          <div class="balance-action-label">Statement</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- KYC banner -->
+    <div class="kyc-banner" id="kycBanner">
+      <div class="kyc-banner-inner">
+        <div class="kyc-icon">⚠️</div>
+        <div>
+          <div class="kyc-title">Complete your verification</div>
+          <div class="kyc-sub">Your account is under review. Full access granted once your ID is verified.</div>
+          <button class="kyc-btn" onclick="window.location.href='kyc-bvn.html'">Continue verification →</button>
         </div>
-        <div class="txn-amount debit">−₦45,000</div>
       </div>
-      <div class="txn-row">
-        <div class="txn-icon green">🏦</div>
-        <div class="txn-info">
-          <div class="txn-title">Savings deposit</div>
-          <div class="txn-date">28 Mar · School fees goal</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- Loan products -->
+      <div class="section-header">
+        <div class="section-title">Available loans</div>
+        <a class="section-link" href="loans.html">See all →</a>
+      </div>
+      <div class="loans-scroll" id="loansScroll">
+        <div style="text-align:center;padding:20px;color:#9ab8a4;font-size:13px;font-weight:600;width:100%">Loading...</div>
+      </div>
+
+      <!-- Quick access -->
+      <div class="section-header">
+        <div class="section-title">Quick access</div>
+      </div>
+      <div class="quick-grid">
+        <a class="quick-card" href="loans.html">
+          <span class="quick-icon">💰</span>
+          <div class="quick-label">Loans</div>
+          <div class="quick-sub">Apply now</div>
+        </a>
+        <a class="quick-card" href="savings.html">
+          <span class="quick-icon">🏦</span>
+          <div class="quick-label">Savings</div>
+          <div class="quick-sub">Set a goal</div>
+        </a>
+        <a class="quick-card" href="insurance.html">
+          <span class="quick-icon">🛡️</span>
+          <div class="quick-label">Insurance</div>
+          <div class="quick-sub">Get covered</div>
+        </a>
+        <a class="quick-card" href="loan-status.html">
+          <span class="quick-icon">📊</span>
+          <div class="quick-label">My loans</div>
+          <div class="quick-sub">Track status</div>
+        </a>
+        <a class="quick-card" href="profile.html">
+          <span class="quick-icon">🪪</span>
+          <div class="quick-label">Profile</div>
+          <div class="quick-sub">My details</div>
+        </a>
+        <a class="quick-card" href="#">
+          <span class="quick-icon">🎁</span>
+          <div class="quick-label">Benefits</div>
+          <div class="quick-sub">View all</div>
+        </a>
+      </div>
+
+      <!-- Recent transactions -->
+      <div class="section-header">
+        <div class="section-title">Recent transactions</div>
+        <button class="section-link">See all</button>
+      </div>
+
+      <div class="txn-card">
+        <div class="txn-row">
+          <div class="txn-icon green">💰</div>
+          <div class="txn-info">
+            <div class="txn-title">Loan disbursement</div>
+            <div class="txn-date">Today · 9:14 AM</div>
+          </div>
+          <div class="txn-amount credit">+₦420,000</div>
         </div>
-        <div class="txn-amount debit">−₦50,000</div>
+        <div class="txn-row">
+          <div class="txn-icon red">📤</div>
+          <div class="txn-info">
+            <div class="txn-title">April repayment</div>
+            <div class="txn-date">25 Apr · Auto-debit</div>
+          </div>
+          <div class="txn-amount debit">−₦27,500</div>
+        </div>
+        <div class="txn-row">
+          <div class="txn-icon green">🛡️</div>
+          <div class="txn-info">
+            <div class="txn-title">Insurance premium</div>
+            <div class="txn-date">1 Apr · Motor cover</div>
+          </div>
+          <div class="txn-amount debit">−₦45,000</div>
+        </div>
+        <div class="txn-row">
+          <div class="txn-icon green">🏦</div>
+          <div class="txn-info">
+            <div class="txn-title">Savings deposit</div>
+            <div class="txn-date">28 Mar · School fees goal</div>
+          </div>
+          <div class="txn-amount debit">−₦50,000</div>
+        </div>
       </div>
+
     </div>
 
   </div>
@@ -589,22 +474,22 @@
       <div class="nav-label">Home</div>
       <div class="nav-dot"></div>
     </button>
-    <button class="nav-item" onclick="window.location.href='#loans'">
+    <button class="nav-item" onclick="window.location.href='loans.html'">
       <div class="nav-icon">💰</div>
       <div class="nav-label">Loans</div>
       <div class="nav-dot"></div>
     </button>
-    <button class="nav-item" onclick="window.location.href='#savings'">
+    <button class="nav-item" onclick="window.location.href='savings.html'">
       <div class="nav-icon">🏦</div>
       <div class="nav-label">Savings</div>
       <div class="nav-dot"></div>
     </button>
-    <button class="nav-item" onclick="window.location.href='#insurance'">
+    <button class="nav-item" onclick="window.location.href='insurance.html'">
       <div class="nav-icon">🛡️</div>
       <div class="nav-label">Insurance</div>
       <div class="nav-dot"></div>
     </button>
-    <button class="nav-item" onclick="window.location.href='#profile'">
+    <button class="nav-item" onclick="window.location.href='profile.html'">
       <div class="nav-icon">👤</div>
       <div class="nav-label">Profile</div>
       <div class="nav-dot"></div>
@@ -613,56 +498,85 @@
 
   <script type="module">
     import { auth, db } from './js/firebase.js';
-    import { onAuthStateChanged, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // Greeting based on time
+    // Greeting
     const hour = new Date().getHours();
-    const greetingText = hour < 12 ? 'Good morning,' : hour < 17 ? 'Good afternoon,' : 'Good evening,';
-    document.getElementById('greeting').textContent = greetingText;
+    document.getElementById('greeting').textContent =
+      hour < 12 ? 'Good morning,' : hour < 17 ? 'Good afternoon,' : 'Good evening,';
 
-    // Auth state check
+    // Sign out
+    window.doSignOut = async function () {
+      await signOut(auth);
+      window.location.href = 'login.html';
+    };
+
+    // Auth state
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = 'index.html';
-        return;
-      }
+      if (!user) { window.location.href = 'login.html'; return; }
 
       try {
+        // Load member profile
         const memberDoc = await getDoc(doc(db, 'members', user.uid));
 
         if (memberDoc.exists()) {
           const data = memberDoc.data();
-
-          // Show name
-          const name = data.fullName || 'Member';
-          document.getElementById('memberName').textContent = name;
+          document.getElementById('memberName').textContent = data.fullName || 'Member';
           document.getElementById('memberId').textContent = data.memberId || 'NUT-··-···-·····';
-          document.getElementById('balance').textContent = (data.walletBalance || 0).toLocaleString('en-NG', { minimumFractionDigits: 2 });
+          document.getElementById('balance').textContent = Number(data.walletBalance || 0).toLocaleString('en-NG', { minimumFractionDigits: 2 });
 
-          // Show KYC banner if pending
-          if (data.kycStatus === 'pending_review' || !data.kycStatus) {
-            document.getElementById('kycBanner').style.display = 'flex';
+          if (!data.kycStatus || data.kycStatus === 'pending') {
+            document.getElementById('kycBanner').style.display = 'block';
           }
-
         } else {
-          document.getElementById('memberName').textContent = 'New Member';
-          document.getElementById('kycBanner').style.display = 'flex';
+          document.getElementById('memberName').textContent = 'Member';
+          document.getElementById('kycBanner').style.display = 'block';
         }
+
+        // Load loan products
+        await loadLoanProducts();
 
       } catch (err) {
         console.error(err);
         document.getElementById('memberName').textContent = 'Member';
       }
 
-      // Hide loading screen
       document.getElementById('loadingScreen').style.display = 'none';
     });
 
-    // Sign out
-    window.signOut = async function () {
-      await fbSignOut(auth);
-      window.location.href = 'index.html';
+    async function loadLoanProducts() {
+      try {
+        const snap = await getDocs(collection(db, 'loanProducts'));
+        const products = snap.docs
+          .map(d => ({ id: d.id, ...d.data() }))
+          .filter(p => p.isActive);
+
+        const container = document.getElementById('loansScroll');
+
+        if (!products.length) {
+          container.innerHTML = `<div class="no-products">No loan products available yet. Check back soon.</div>`;
+          return;
+        }
+
+        container.innerHTML = products.map(p => `
+          <div class="loan-card">
+            <span class="loan-card-icon">${p.icon || '💰'}</span>
+            <div class="loan-card-name">${p.name}</div>
+            <div class="loan-card-rate">${p.rate}%/month</div>
+            <div class="loan-card-max">Up to ₦${Number(p.maxAmount).toLocaleString()}</div>
+            <button class="loan-card-btn" onclick="applyLoan('${p.id}')">Apply →</button>
+          </div>`).join('');
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById('loansScroll').innerHTML = `<div class="no-products">Could not load products. Please refresh.</div>`;
+      }
+    }
+
+    window.applyLoan = function (productId) {
+      sessionStorage.setItem('selectedProductId', productId);
+      window.location.href = 'loan-apply.html';
     };
   </script>
 
