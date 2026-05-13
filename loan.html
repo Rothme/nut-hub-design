@@ -236,7 +236,7 @@
           memberData = memberDoc.data();
         }
 
-        // Check KYC
+        // Check KYC — show warning but do not block products
         if (memberData && memberData.kycStatus !== 'verified') {
           document.getElementById('kycBlock').style.display = 'block';
         }
@@ -326,10 +326,6 @@
     }
 
     window.applyForLoan = function (productId) {
-      if (memberData && memberData.kycStatus !== 'verified') {
-        alert('Please complete your KYC verification before applying for a loan.');
-        return;
-      }
       sessionStorage.setItem('selectedProductId', productId);
       window.location.href = 'loan-apply.html';
     };
